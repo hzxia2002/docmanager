@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+
+<!-- =================================================================== -->
+<!-- $Id: build.xml,v 1.1.1.1 2005/11/15 06:01:08 jackie Exp $              -->
+<!-- =================================================================== -->
+
+<project name="project" default="all" basedir=".">
+
+		<!-- change this property to use a compiler other than javac. -->
+		<property name="build.compiler" value="modern" />
+
+		<!-- The root directory of the workspace -->
+		<property name="proj.home" value="." />
+		<property name="proj.properties" value="${proj.home}/src/*.properties" />
+
+		<!-- The destination directory for the build -->
+		<property name="proj.build" value="${proj.home}/web/WEB-INF/classes" />
+		<property name="proj.buildpropertiesdir" value="${proj.home}/web/WEB-INF/classes" />
+
+		<property name="proj.src" value="${proj.home}/src" />
+		<property name="proj.test" value="${proj.home}/test" />
+		<property name="proj.lib" value="${proj.home}/web/WEB-INF/lib" />
+        <property name="proj.deploy" value="${proj.home}/deploy" />
+
+		<!-- The destination directory for all the compiled classes. -->
+		<!--<property name="proj.classbindir" value="${proj.build}/classes"/>-->
+		<property name="proj.srcdocroot" value="${proj.home}/web" />
+		<property name="proj.classbindir" value="${proj.srcdocroot}/WEB-INF/classes" />
+
+		<property name="proj.dist" value="${proj.home}/dist" />
+		<property name="proj.war" value="${proj.dist}/citictrust.war" />
+		
+		<property name="tomcat.deployhome" value="D:\eclipse-home\Tomcat\webapps" />
+
+		<!-- Compilation Classpath -->
+		<path id="compile.classpath">
+			<fileset dir="${proj.lib}">
+				<include name="**/*.jar" />
+			</fileset>
+            <fileset dir="${proj.deploy}/lib">
+                <include name="**/*.jar" />
+            </fileset>
+		</path>
+
+		<!--
+		<property name="proj.buildejbjar" value="${proj.build}/ejbjar"/>
+		<property name="proj.ejbjar" value="${proj.build}/enejb.jar"/>
+		-->
+
+		<property name="tomcat.deployhome" value="D:\jakarta-tomcat-5.0.28\webapps" />
+
+		<property name="tomcat.deploywar" value="${tomcat.deployhome}\citictrust" />
+
+	<target name="init">
+	</target>
+
+	<target name="compile" depends="init">
+		<echo>Compiling classes into:${proj.classbindir}</echo>
+		<mkdir dir="${proj.classbindir}" />
+		<!--<javac encoding="utf-8" destdir="${proj.classbindir}" deprecation="on" fork="true" memoryInitialSize="180m" memoryMaximumSize="512m">-->
+		<javac destdir="${proj.classbindir}" debug="yes" verbose="no"
+			encoding="UTF-8" source="1.5" failonerror="true" fork="true"
+			memoryInitialSize="64m" memoryMaximumSize="256m" listfiles="true">
+			<src path="${proj.src}" />
+			<include name="**/*.java" />
+			<classpath refid="compile.classpath" />
+		</javac>
+
+		<copy todir="${proj.classbindir}">
+			<fileset dir="${proj.src}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- 以开发模式发布的war包 （测试环境）-->
+	<target name="war_test" depends="compile">
+		<echo>Building war file into:${proj.war}</echo>
+		<mkdir dir="${proj.dist}" />
+		<delete file="${proj.war}" />
+
+        <delete file="${proj.classbindir}/application.properties" />
+        <delete file="${proj.classbindir}/dexpt.handler.properties" />
+        <!--<delete file="${proj.classbindir}/applicationContext-eai.xml" />-->
+
+        <copy todir="${proj.classbindir}/">
+            <fileset dir="${proj.deploy}/test">
+                <include name="application.properties" />
+                <include name="dexpt.handler.properties" />
+                <!--<include name="applicationContext-eai.xml" />-->
+            </fileset>
+        </copy>
+
+		<jar destfile="${proj.war}" encoding="UTF-8">
+		    <fileset dir="${proj.srcdocroot}">
+		    	<exclude name="**/lib/servlet-api.jar" />
+		    	<exclude name="**/lib/jsp-api.jar" />
+		    	<exclude name="**/lib/servlet-api-2.5-6.1.9.jar" />
+		    </fileset>
+		</jar>
+
+        <delete file="${proj.classbindir}/application.properties" />
+        <delete file="${proj.classbindir}/dexpt.handler.properties" />
+        <!--<delete file="${proj.classbindir}/applicationContext-eai.xml" />-->
+
+        <copy todir="${proj.classbindir}/">
+            <fileset dir="${proj.src}">
+                <include name="application.properties" />
+                <include name="dexpt.handler.properties" />
+                <!--<include name="applicationContext-eai.xml" />-->
+            </fileset>
+        </copy>
+	</target>
+
+    <!-- 以开发模式发布的war包 （运行环境）-->
+    <target name="war_online" depends="compile">
+        <echo>Building war file into:${proj.war}</echo>
+        <mkdir dir="${proj.dist}" />
+        <delete file="${proj.war}" />
+
+        <delete file="${proj.classbindir}/application.properties" />
+        <delete file="${proj.classbindir}/dexpt.handler.properties" />
+        <delete file="${proj.classbindir}/applicationContext-eai.xml" />
+
+        <copy todir="${proj.classbindir}/">
+            <fileset dir="${proj.deploy}/online">
+                <include name="application.properties" />
+                <include name="dexpt.handler.properties" />
+                <include name="applicationContext-eai.xml" />
+            </fileset>
+        </copy>
+
+        <jar destfile="${proj.war}" encoding="UTF-8">
+            <fileset dir="${proj.srcdocroot}">
+                <exclude name="**/lib/servlet-api.jar" />
+                <exclude name="**/lib/jsp-api.jar" />
+                <exclude name="**/lib/servlet-api-2.5-6.1.9.jar" />
+            </fileset>
+        </jar>
+
+        <delete file="${proj.classbindir}/application.properties" />
+        <delete file="${proj.classbindir}/dexpt.handler.properties" />
+        <delete file="${proj.classbindir}/applicationContext-eai.xml" />
+
+        <copy todir="${proj.classbindir}/">
+            <fileset dir="${proj.src}">
+                <include name="application.properties" />
+                <include name="dexpt.handler.properties" />
+                <include name="applicationContext-eai.xml" />
+            </fileset>
+        </copy>
+    </target>
+	
+	<target name="deploy" depends="compile">
+		<copy file="${proj.war}" tofile="${tomcat.deployhome}/icombo.war"/>
+	</target>
+
+	<target name="clean" depends="init">
+		<delete includeemptydirs="true">
+			<fileset dir="${proj.build}" includes="**/**" />
+		</delete>
+	</target>
+
+	<target name="all" depends="war_test" />
+</project>
