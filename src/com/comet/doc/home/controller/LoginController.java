@@ -54,7 +54,7 @@ public class LoginController extends SysLogController {
             // 取得当前登录用户
             SysUser sysUser = UserSessionUtils.getInstance().getLoginedUser();
         
-            if(StringUtils.equals(sysUser.getUserType(),com.citictrust.trust.utils.Constants.USER_TYPE_MEMBER)) {
+            if(StringUtils.equals(sysUser.getUserType(),com.docmanager.trust.utils.Constants.USER_TYPE_MEMBER)) {
                 url = "/portal/main.jsp";
             } else {
                 Map<String, SysRole> map = sysUserManager.getUserRolesAsMap(loginUser.getId());
