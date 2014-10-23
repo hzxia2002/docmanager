@@ -1,0 +1,160 @@
+﻿
+/* --------------
+   *   tree  *
+* ------------ */
+/*.l-tree*/
+/*{*/
+    /*margin:0; padding:0; list-style:none; overflow:auto; position: relative; display:block; background:white;min-width: 100% ;*/
+/*}*/
+/*.l-tree-loading*/
+/*{*/
+    /*position: absolute;z-index: 91000;  top:40%; left:50%; overflow:hidden;*/
+    /*background:url('../images/tree/loading.gif') no-repeat 0px 0px;width:24px; height:24px;*/
+    /*display:none;*/
+/*}*/
+/*.l-tree a,.l-tree span{color: #333;display: inherit;height: 22px;line-height: 22px; text-decoration:none;white-space: nowrap;}*/
+/*.l-tree ul,.l-tree li{list-style:none; margin:0; padding:0;min-width: 100% ;}*/
+/*.l-tree li ul{list-style:none;  margin-left: 22px;background:url('../images/tree/line_conn.gif') repeat-y ;background-position:2px 0px; }*/
+/*.l-tree li {clear: both;display: inline;cursor: pointer;white-space: nowrap; }*/
+/*.l-tree li .l-body{ height:22px;line-height: 22px;}*/
+/*.l-tree .l-box*/
+/*{*/
+    /*width:22px; height:22px; overflow:hidden; float:left; background:url('../images/tree/tree.gif');background-position:-22px -220px;*/
+/*}*/
+/*.l-tree-noline .l-box*/
+/*{*/
+    /*background-image:url('../images/tree/tree-noline.gif');*/
+/*}*/
+/*.l-tree .l-expandable-close{background-position:0px -44px;}*/
+/*.l-tree .l-first .l-expandable-close{background-position:0px -22px;}*/
+/*.l-tree .l-last .l-expandable-close{ background-position:0px -66px;}*/
+/*.l-tree .l-onlychild  .l-expandable-close{background-position:0px 0px;}*/
+
+/*.l-tree .l-expandable-open{background-position:0px -132px;}*/
+/*.l-tree .l-first .l-expandable-open{background-position:0px -110px;}*/
+/*.l-tree .l-last .l-expandable-open{ background-position:0px -154px;}*/
+/*.l-tree .l-onlychild  .l-expandable-open{background-position:0px -88px;}*/
+
+/*.l-tree .l-over{background: whiteSmoke;}*/
+/*.l-tree .l-selected {background: #D9E8FB;}*/
+/*.l-selected span{background: #D9E8FB;height: 22px;line-height: 22px}*/
+
+/*.l-tree .l-line{background-position:0px -176px;}*/
+/*.l-tree .l-note{ background-position:0px -198px;}*/
+
+/*.l-tree .l-note{ background-position:0px -198px;}*/
+/*.l-tree .l-note-last{ background-position:0px -220px;}*/
+/*.l-tree .l-checkbox-unchecked{ background-position:-22px 0px;}*/
+/*.l-tree .l-checkbox-checked{ background-position:-22px -22px;}*/
+/*.l-tree .l-checkbox-incomplete{ background-position:-22px -44px;}*/
+
+/*.l-tree .l-over .l-checkbox-unchecked{ background-position:-44px 0px;}*/
+/*.l-tree .l-over .l-checkbox-checked{ background-position:-44px -22px;}*/
+/*.l-tree .l-over .l-checkbox-incomplete{ background-position:-44px -44px;}*/
+
+
+/*.l-tree .l-tree-icon-folder{ background-position:-22px -88px;}*/
+/*.l-tree .l-tree-icon-none{ background:none;}*/
+/*.l-tree .l-tree-icon-none img{width:22px; height:22px; border:0;}*/
+/*.l-tree .l-tree-icon-folder-open{background-position:-44px -88px;}*/
+/*.l-tree .l-tree-icon-leaf{background-position:-22px -110px;}*/
+
+
+
+.l-tree * {padding:0; margin:0; font-size:12px; font-family: "微软雅黑", "宋体", Arial, sans-serif;}
+.l-tree {margin:0; padding:5px; color:#333;}
+.l-tree li{padding:0; margin:0; list-style:none; line-height:14px; text-align:left; white-space:nowrap}
+.l-tree li ul{ margin:0; padding:0 0 0 18px}
+.l-tree li ul.l-line{ background:url(../images/tree/line_conn.gif) 0 0 repeat-y;}
+
+.l-tree li a {padding:0 3px 0 0; margin:2px 10px 0 0; cursor:pointer; height:16px; color:#333; background-color: transparent;
+    text-decoration:none; vertical-align:top; display: inline-block}
+.l-tree li a:hover {text-decoration:no-underline}
+.l-tree li a.l-selected {background-color:#abf9cf ;background-color: rgba(55, 217, 195, 0.40); color:black;opacity:0.8; filter:alpha(opacity=80)}
+.l-tree li a.curSelectedNode_Edit {padding-top:0px; background-color:#FFE6B0; color:black;
+    border:1px #FFB951 solid; opacity:0.8; filter:alpha(opacity=80)}
+.l-tree li a.tmpTargetNode {padding-top:0px; background-color:#316AC5; color:white; border:1px #316AC5 solid;
+    opacity:0.8; filter:alpha(opacity=80)}
+.l-tree li a input.rename {height:14px; width:80px; padding:0; margin:0;
+    font-size:12px; border:1px #7EC4CC solid; *border:0px}
+.l-tree li span {line-height:16px; margin-right: 2px;}
+.l-tree li div button{width:16px; height:16px; vertical-align:middle; border:0 none; cursor: pointer;
+    background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
+    background:url("../images/tree/treeStandard.png"); *background:url(".../images/tree/l-treeStandard.gif")
+}
+.l-tree .btnbox {background:url(../images/tree/treeStandard.gif) no-repeat scroll 0 0 transparent;width: 16px;height: 16px;vertical-align: middle; border:0 none; }
+
+.l-tree li button.chk {width:13px; height:13px; margin:0 3px 0 0; cursor: auto}
+.l-tree li button.chk.checkbox_false_full {background-position:0 0}
+.l-tree li button.chk.checkbox_false_full_focus {background-position:0 -12px}
+.l-tree li button.chk.checkbox_true_full {background-position:0 -24px}
+.l-tree li button.chk.checkbox_true_full_focus {background-position:0 -36px}
+.l-tree li button.chk.checkbox_true_part {background-position:0 -48px}
+.l-tree li button.chk.checkbox_true_part_focus {background-position:0 -60px}
+.l-tree li button.chk.checkbox_false_part {background-position:0 -72px}
+.l-tree li button.chk.checkbox_false_part_focus {background-position:0 -84px}
+.l-tree li button.chk.radio_false_full {background-position:-13px 0}
+.l-tree li button.chk.radio_false_full_focus {background-position:-13px -12px}
+.l-tree li button.chk.radio_true_full {background-position:-13px -24px}
+.l-tree li button.chk.radio_true_full_focus {background-position:-13px -36px}
+.l-tree li button.chk.radio_true_part {background-position:-13px -48px}
+.l-tree li button.chk.radio_true_part_focus {background-position:-13px -60px}
+.l-tree li button.chk.radio_false_part {background-position:-13px -72px}
+.l-tree li button.chk.radio_false_part_focus {background-position:-13px -84px}
+
+.l-tree li button.switch {width:18px; height:18px}
+.l-tree li button.lineBtn {width:18px; height:18px}
+.l-tree li button.root_open{background-position:-62px -54px}
+.l-tree li button.root_close{background-position:-44px -54px}
+.l-tree li button.roots_open{background-position:-62px 0}
+.l-tree li button.roots_close{background-position:-44px 0}
+.l-tree li button.center_open{background-position:-62px -18px}
+.l-tree li button.center_close{background-position:-44px -18px}
+.l-tree li button.bottom_open{background-position:-62px -36px}
+.l-tree li button.bottom_close{background-position:-44px -36px}
+.l-tree li button.noline_open{background-position:-62px -72px}
+.l-tree li button.noline_close{background-position:-44px -72px}
+.l-tree li button.root_docu{ background:none;}
+.l-tree li button.roots_docu{background-position:-26px 0}
+.l-tree li button.center_docu{background-position:-26px -18px}
+.l-tree li button.bottom_docu{background-position:-26px -36px}
+.l-tree li button.noline_docu{ background:none;}
+
+.l-tree .l-box{background:url(../images/tree/tree.gif) no-repeat scroll 0 0 transparent;width: 18px;height: 18px;vertical-align: middle;}
+.l-tree .l-tree-icon-leaf{background-position:-23px -114px;}
+
+.l-tree li button.ico_open{margin-right:6px; background-position:-80px -16px; vertical-align:top; *vertical-align:middle}
+.l-tree li button.ico_close{margin-right:6px; background-position:-80px -1px; vertical-align:top; *vertical-align:middle}
+.l-tree li button.ico_docu{margin-right:6px; background-position:-80px -32px; vertical-align:top; *vertical-align:middle}
+.l-tree li button.edit {margin-right:2px; background-position:-80px -48px; vertical-align:top; *vertical-align:middle}
+.l-tree li button.remove {margin-right:2px; background-position:-80px -64px; vertical-align:top; *vertical-align:middle}
+
+.l-tree li button.ico_loading{margin-right:2px; background:url(../images/tree/loading.gif) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+
+ul.tmpTargetl-tree {background-color:#FFE6B0; opacity:0.8; filter:alpha(opacity=80)}
+
+button.tmpl-treeMove_arrow {width:16px; height:16px; padding:0; margin:2px 0 0 1px; border:0 none; position:absolute;
+    background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
+    background-position:-80px -80px; background-image:url("../images/tree/treeStandard.png"); *background-image:url("../images/tree/l-treeStandard.gif")}
+
+ul.l-treeDragUL {margin:0; padding:0; position:absolute; width:auto; height:auto;overflow:auto; background-color:#cfcfcf; border:1px #00B83F dotted; opacity:0.8; filter:alpha(opacity=80)}
+.l-treeMask {z-index:10000; background-color:#cfcfcf; opacity:0.0; filter:alpha(opacity=0); position:absolute}
+
+
+.l-tree-loading
+{
+position: absolute;z-index: 91000;  top:40%; left:50%; overflow:hidden;
+background:url('../images/tree/loading.gif') no-repeat 0px 0px;width:24px; height:24px;
+display:none;
+}
+
+.l-tree .l-checkbox-unchecked{ background-position:-25px -1px;vertical-align: middle;}
+.l-tree .l-checkbox-checked{ background-position:-25px -23px;}
+.l-tree .l-checkbox-incomplete{ background-position:-25px -45px;}
+
+.l-tree .l-over .l-checkbox-unchecked{ background-position:-47px -1px;}
+.l-tree .l-over .l-checkbox-checked{ background-position:-47px -23px;}
+.l-tree .l-over .l-checkbox-incomplete{ background-position:-47px -45px;}
+
+.l-tree .l-tree-icon-none{ background:none;}
+.l-tree .l-tree-icon-none img{width:16px; height:16px; border:0;}
