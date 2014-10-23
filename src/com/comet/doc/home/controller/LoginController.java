@@ -1,4 +1,4 @@
-package com.docmanager.home.controller;
+package com.comet.doc.home.controller;
 
 import com.comet.core.security.user.BaseUser;
 import com.comet.core.security.util.SpringSecurityUtils;
@@ -54,7 +54,7 @@ public class LoginController extends SysLogController {
             // 取得当前登录用户
             SysUser sysUser = UserSessionUtils.getInstance().getLoginedUser();
         
-            if(StringUtils.equals(sysUser.getUserType(),com.docmanager.trust.utils.Constants.USER_TYPE_MEMBER)) {
+            if(StringUtils.equals(sysUser.getUserType(),com.comet.doc.utils.Constants.USER_TYPE_MEMBER)) {
                 url = "/portal/main.jsp";
             } else {
                 Map<String, SysRole> map = sysUserManager.getUserRolesAsMap(loginUser.getId());

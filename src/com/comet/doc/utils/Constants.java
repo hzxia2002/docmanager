@@ -1,4 +1,4 @@
-package com.doc.manager.utils;
+package com.comet.doc.utils;
 
 import java.math.BigDecimal;
 

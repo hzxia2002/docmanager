@@ -17,20 +17,6 @@
         <!--<property name="tableConfigService" ref="configTableManager"></property>-->
     <!--</bean>-->
 
-    <bean name="paymentUtils" class="com.comet.payment.chinapay.PaymentUtils">
-        <property name="merKeyPath" value="${chinapay.merKeyPath}"></property>
-        <property name="pubKeyPath" value="${chinapay.pubKeyPath}"></property>
-        <property name="merId" value="${chinapay.merId}"></property>
-        <property name="newCardBindServiceUrl" value="${chinapay.newCardBindService.url}"></property>
-        <property name="appSysId" value="${chinapay.appSysId}"/>
-        <property name="bgCardValidUrl" value="${chinapay.bgCardValidUrl}"/>
-        <property name="paymentUrl" value="${chinapay.payment.url}"/>
-        <property name="queryUrl" value="${chinapay.query.url}"/>
-        <property name="key" value="${chinapay.key}"/>
-        <property name="paySuccessUrl" value="${paySuccessUrl}"/>
-        <property name="payFailureUrl" value="${payFailureUrl}"/>
-    </bean>
-
     <bean name="systemMap" class="java.util.HashMap">
         <constructor-arg>
             <map>
@@ -38,74 +24,5 @@
                 <entry key="fileUploadSize" value="${fileUploadSize}" />
             </map>
         </constructor-arg>
-    </bean>
-
-    <!-- 用户权益生效Job -->
-    <bean name="userRightValidJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass">
-            <value>com.citictrust.trust.job.UserRightValidJob</value>
-        </property>
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="usrRightManager" value-ref="usrRightManager" />
-            </map>
-        </property>
-    </bean>
-
-    <!-- 产品发售状态更新Job -->
-    <bean name="productStatusChangeJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass">
-            <value>com.citictrust.trust.job.ProductStatusChangeJob</value>
-        </property>
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="prdProductMainManager" value-ref="prdProductMainManager" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="payQueryJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass">
-            <value>com.citictrust.trust.job.PayQueryJob</value>
-        </property>
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="payManager" value-ref="payManager" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="userRightValidTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="userRightValidJob" />
-        <property name="cronExpression">
-            <value>0 0/20 * * * ?</value>
-        </property>
-    </bean>
-
-    <bean id="productStatusChangeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="productStatusChangeJob" />
-        <property name="cronExpression">
-            <value>0 0/20 * * * ?</value>
-        </property>
-    </bean>
-
-    <bean id="payQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="payQueryJob" />
-        <property name="cronExpression">
-            <value>0/40 * * * * ?</value>
-        </property>
-    </bean>
-
-    <bean id="scheduler"
-          class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
-          destroy-method="destroy">
-        <property name="autoStartup" value="true" />
-        <property name="triggers">
-            <list>
-                <ref local="userRightValidTrigger" />
-                <ref local="productStatusChangeTrigger" />
-                <ref local="payQueryTrigger" />
-            </list>
-        </property>
     </bean>
 </beans>

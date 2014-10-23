@@ -27,7 +27,7 @@
         <intercept-url pattern="/login.jsp*" filters="none" requires-channel="https"/>
         <intercept-url pattern="/j_spring_security_check*" filters="none" requires-channel="https"/>
         -->
-        <intercept-url pattern="/cxf/*" requires-channel="https"/>
+        <!--<intercept-url pattern="/cxf/*" requires-channel="https"/>-->
         <form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=1"
                     default-target-url="/login/dispatch.do"/>
         <logout invalidate-session="true" logout-success-url="/index.jsp" logout-url="/j_spring_security_logout"/>

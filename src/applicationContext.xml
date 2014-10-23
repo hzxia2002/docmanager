@@ -124,7 +124,6 @@
         <property name="mappingDirectoryLocations">
             <list>
                 <value>classpath:/com/comet/*/domain/hbm</value>
-                <value>classpath:/com/citictrust/*/domain/hbm</value>
             </list>
         </property>
     </bean>
@@ -176,7 +175,7 @@
         <!--context:exclude-filter type="regex" expression="com.justonetech.*.controller.*"/-->
     </context:component-scan>
 
-    <import resource="applicationContext-datasource.xml"/>
+    <!--<import resource="applicationContext-datasource.xml"/>-->
     <import resource="applicationContext-security.xml"/>
     <import resource="applicationContext-beans.xml"/>
     <import resource="applicationContext-mvc.xml"/>
@@ -184,6 +183,7 @@
     <import resource="applicationContext-mail.xml"/>
     <import resource="applicationContext-sms.xml"/>
     <import resource="applicationContext-hazelcast.xml"/>
+    <import resource="applicationContext-ws.xml"/>
     <!--<import resource="applicationContext-integration.xml"/>-->
     <mvc:default-servlet-handler/>
     <!--<import resource="applicationContext-mvc.xml"/>-->
