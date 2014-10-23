@@ -23,7 +23,7 @@ public class DocWebServiceImpl implements DocWebService {
 
         String  userdeptName= "";
         String username = "夏红忠";
-        map.put("result", "登陆成功");
+        map.put("result", "登录成功");
         map.put("resulttype", "1");
         map.put("userid", userid);
         map.put("username", username);
