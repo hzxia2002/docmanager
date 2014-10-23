@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.system.domain">
+	<class
+		name="com.comet.system.domain.SysCodeDetail"
+		table="SYS_CODE_DETAIL"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">true</meta>
+		<meta attribute="projectable">false</meta>
+        <meta attribute="tableName">系统代码明细</meta>
+        <meta attribute="tableComment">系统代码明细</meta>
+            <meta attribute="sync-templatePatterns">tree\w*</meta>
+        <meta attribute="sub-system">system</meta>
+
+		<id
+			name="id"
+			type="java.lang.Long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="code"
+			column="CODE"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">编码</meta>
+            <meta attribute="ColumnComment">编码</meta>
+        </property>
+
+		<property
+			name="name"
+			column="NAME"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">名称</meta>
+            <meta attribute="ColumnComment">名称</meta>
+        </property>
+
+		<property
+			name="isLeaf"
+			column="IS_LEAF"
+			type="java.lang.Boolean"
+			not-null="false"
+			length="1"
+        >
+            <meta attribute="ColumnName">叶节点</meta>
+            <meta attribute="ColumnComment">叶节点</meta>
+        </property>
+
+		<property
+			name="treeId"
+			column="TREE_ID"
+			type="string"
+			not-null="false"
+			length="200"
+        >
+            <meta attribute="ColumnName">树形层次</meta>
+            <meta attribute="ColumnComment">树形层次</meta>
+        </property>
+
+		<property
+			name="isReserved"
+			column="IS_RESERVED"
+			type="java.lang.Boolean"
+			not-null="false"
+			length="1"
+        >
+            <meta attribute="ColumnName">是否系统定义</meta>
+            <meta attribute="ColumnComment">系统定义</meta>
+        </property>
+
+		<property
+			name="tag"
+			column="TAG"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">特殊标记</meta>
+            <meta attribute="ColumnComment">特殊标记</meta>
+        </property>
+
+		<property
+			name="isValid"
+			column="IS_VALID"
+			type="java.lang.Boolean"
+			not-null="false"
+			length="1"
+        >
+            <meta attribute="ColumnName">是否有效</meta>
+            <meta attribute="ColumnComment">是否有效</meta>
+        </property>
+
+		<property
+			name="description"
+			column="DESCRIPTION"
+			type="string"
+			not-null="false"
+			length="200"
+        >
+            <meta attribute="ColumnName">备注</meta>
+            <meta attribute="ColumnComment">备注</meta>
+        </property>
+
+		<many-to-one
+			name="sysCode"
+			column="SYS_CODE_ID"
+			class="com.comet.system.domain.SysCode"
+			not-null="false"
+		>
+		</many-to-one>
+		<many-to-one
+			name="parent"
+			column="PARENT_ID"
+			class="com.comet.system.domain.SysCodeDetail"
+			not-null="false"
+		>
+		</many-to-one>
+	
+<!--
+
+		<set name="monCameraMoveLogsBymonRegion" inverse="true">
+			<key column="MON_REGION"/>
+			<one-to-many class="MonCameraMoveLog"/>
+		</set>
+
+-->
+<!--
+
+		<set name="monCameraMoveLogsBymonDanger" inverse="true">
+			<key column="MON_DANGER"/>
+			<one-to-many class="MonCameraMoveLog"/>
+		</set>
+
+-->
+<!--
+
+		<set name="monCameraInfosBymonRegion" inverse="true">
+			<key column="MON_REGION"/>
+			<one-to-many class="MonCameraInfo"/>
+		</set>
+
+-->
+<!--
+
+		<set name="monCameraInfosBycameraType" inverse="true">
+			<key column="CAMERA_TYPE"/>
+			<one-to-many class="MonCameraInfo"/>
+		</set>
+
+-->
+<!--
+
+		<set name="monCameraInfosBymonDanger" inverse="true">
+			<key column="MON_DANGER"/>
+			<one-to-many class="MonCameraInfo"/>
+		</set>
+
+-->
+<!--
+
+		<set name="sysPrivileges" inverse="true">
+			<key column="TYPE"/>
+			<one-to-many class="SysPrivilege"/>
+		</set>
+
+-->
+<!--
+
+		<set name="sysCodeDetails" inverse="true">
+			<key column="PARENT_ID"/>
+			<one-to-many class="SysCodeDetail"/>
+		</set>
+
+-->
+<!--
+
+		<set name="projectPlanMaps" inverse="true">
+			<key column="MAP_TYPE"/>
+			<one-to-many class="ProjectPlanMap"/>
+		</set>
+
+-->
+<!--
+
+		<set name="sysLogs" inverse="true">
+			<key column="LOG_TYPE"/>
+			<one-to-many class="SysLog"/>
+		</set>
+
+-->
+<!--
+
+		<set name="sysPersons" inverse="true">
+			<key column="EDUCATION"/>
+			<one-to-many class="SysPerson"/>
+		</set>
+
+-->
+<!--
+
+		<set name="monRecFiles" inverse="true">
+			<key column="FILE_TYPE"/>
+			<one-to-many class="MonRecFile"/>
+		</set>
+
+-->
+
+
+	</class>	
+    <query name="syscodedetail_all_data_query">
+        <![CDATA[FROM SysCodeDetail]]>
+    </query>
+</hibernate-mapping>

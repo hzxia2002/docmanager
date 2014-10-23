@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.cms.domain">
+	<class
+		name="DocAttachments"
+		table="doc_attachments"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+        <meta attribute="tableName">doc_attachments</meta>
+        <meta attribute="tableComment">文档附件</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system"></meta>
+
+		<id
+			name="id"
+			type="long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="name"
+			column="NAME"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">NAME</meta>
+            <meta attribute="ColumnComment">文件名称</meta>
+        </property>
+
+		<property
+			name="orginName"
+			column="ORGIN_NAME"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">ORGIN_NAME</meta>
+            <meta attribute="ColumnComment">文件原始名称</meta>
+        </property>
+
+		<property
+			name="uploadDate"
+			column="UPLOAD_DATE"
+			type="string"
+			not-null="false"
+			length="20"
+        >
+            <meta attribute="ColumnName">UPLOAD_DATE</meta>
+            <meta attribute="ColumnComment">上传时间</meta>
+        </property>
+
+		<property
+			name="remark"
+			column="REMARK"
+			type="string"
+			not-null="false"
+			length="500"
+        >
+            <meta attribute="ColumnName">REMARK</meta>
+            <meta attribute="ColumnComment">备注</meta>
+        </property>
+
+		<property
+			name="filePath"
+			column="FILE_PATH"
+			type="string"
+			not-null="false"
+			length="200"
+        >
+            <meta attribute="ColumnName">FILE_PATH</meta>
+            <meta attribute="ColumnComment"></meta>
+        </property>
+
+		<many-to-one
+			name="doc"
+			column="DOC_ID"
+			class="DocDocument"
+			not-null="false"
+		>
+		</many-to-one>
+
+
+	</class>	
+    <query name="docattachments_all_data_query">
+        <![CDATA[FROM DocAttachments]]>
+    </query>
+</hibernate-mapping>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
+       default-autowire="byName" default-lazy-init="false">
+    <!-- 注意上面的default-autowire="byName"，如果没有这个声明那么HibernateDaoSupport中的sessionFactory不会被注入 -->
+
+    <!-- 定义受环境影响易变的变量 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:/application.properties</value>
+                <value>classpath:/messages.properties</value>
+                <value>classpath:/dexpt.handler.properties</value>
+                <!--<value>classpath:/messages_zh_CN.properties</value>-->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename">
+            <value>messages</value>
+        </property>
+    </bean>
+
+    <!--  dataSource -->
+    <bean id="dataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${driverClass}" />
+        <property name="url" value="${jdbcUrl}" />
+        <property name="username" value="${user}" />
+        <property name="password" value="${password}" />
+        <property name="initialSize" value="40"/>
+        <property name="maxActive" value="50"/>
+         <!--removeAbandoned: 是否自动回收超时连接-->    
+        <property name="removeAbandoned"  value="true"/> 
+        <!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->    
+        <property name="removeAbandonedTimeout" value="60"/>
+        <!-- 1000 * 60 * 30  连接在池中保持空闲而不被空闲连接回收器线程-->  
+        <property name="minEvictableIdleTimeMillis" value="1000"/>  
+    	<property name="validationQuery" value="SELECT NOW() FROM DUAL"/> 
+        <!--
+         <property name="autoReconnect" value="true"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="removeAbandonedTimeout" value="300"/>
+        <property name="logAbandoned" value="true"/>
+        -->
+    </bean>
+
+    <!-- 约定优于配置，约定优于配置
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${driverClass}"></property>
+        <property name="jdbcUrl" value="${jdbcUrl}"></property>
+        <property name="minPoolSize" value="1"></property>
+        <property name="maxPoolSize" value="50"></property>
+        <property name="initialPoolSize" value="3"></property>
+        <property name="acquireIncrement" value="1"></property>
+        <property name="maxIdleTime" value="600"></property>
+        <property name="idleConnectionTestPeriod" value="600"></property>
+        <property name="acquireRetryAttempts" value="30"></property>
+        <property name="acquireRetryDelay" value="1000"></property>
+        <property name="breakAfterAcquireFailure" value="true"></property>
+        <property name="checkoutTimeout" value="0"></property>
+        <property name="testConnectionOnCheckout" value="false"></property>
+        <property name="testConnectionOnCheckin" value="true"></property>
+        <property name="preferredTestQuery" value="select 1 from dual"></property>
+        <property name="properties">
+            <props>
+                <prop key="v$session.program">${v$session.program}</prop>
+                <prop key="user">${user}</prop>
+                <prop key="password">${password}</prop>
+            </props>
+        </property>
+    </bean>
+    -->
+
+    <!-- Hibernate配置 -->
+    <bean name="treeIdIncrease" class="java.lang.Integer">
+        <constructor-arg value="1"/>
+    </bean>
+
+    <bean id="hibernateInterceptor" class="com.comet.core.orm.hibernate.HibernateInterceptor">
+        <property name="treeIdIncrease" ref="treeIdIncrease"/>
+        <property name="tableLogger" ref="sysOperationTableLogManager"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="entityInterceptor" ref="hibernateInterceptor"></property>
+        <property name="namingStrategy">
+            <bean class="org.hibernate.cfg.ImprovedNamingStrategy"/>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <!--<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>-->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <!--<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>-->
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <!--<prop key="hbm2ddl.auto">update</prop>-->
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.connection.autoReconnect">true</prop>
+                <prop key="hibernate.connection.autoReconnectForPools">true</prop>
+                <prop key="hibernate.connection.is-connection-validation-required">true</prop>
+                <!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
+                <!--<prop key="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</prop>-->
+            </props>
+        </property>
+        <!--<property name="annotatedPackages" value="com.justonetech.ipromis.domain"/>-->
+        <!--<property name="packagesToScan" value="com.justonetech.ipromis.domain.*"/>-->
+        <property name="mappingDirectoryLocations">
+            <list>
+                <value>classpath:/com/comet/*/domain/hbm</value>
+                <value>classpath:/com/citictrust/*/domain/hbm</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <aop:config proxy-target-class="true">
+        <aop:advisor
+                pointcut="execution(* com.comet.core.orm.hibernate.EntityService.*(..))"
+                advice-ref="txadvice"/>
+        <!--<aop:advisor-->
+                <!--pointcut="execution(* com.*.*.daoservice.*Service.*(..))"-->
+                <!--advice-ref="txadvice"/>-->
+        <!--<aop:advisor-->
+            <!--pointcut="execution(* com.*.*.manager.*Manager.*(..))"-->
+            <!--advice-ref="txadvice"/>-->
+        <!--<aop:advisor-->
+                <!--pointcut="execution(* com.icombo.processor.*Processor.*(..))"-->
+                <!--advice-ref="txadvice"/>-->
+        <aop:advisor
+                pointcut="execution(* com.comet.core.service..*(..))"
+                advice-ref="txadvice"/>
+        <aop:advisor pointcut="execution(* *..manager..*(..))" advice-ref="txadvice"/>
+        <aop:advisor pointcut="execution(* *..daoservice..*(..))" advice-ref="txadvice"/>
+    </aop:config>
+
+    <tx:advice id="txadvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="gridData*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="process*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 自动扫描组件，这里要把web下面的 controller去除，他们是在spring3-servlet.xml中配置的，如果不去除会影响事务管理的。-->
+    <context:component-scan base-package="com.*">
+        <!--<context:include-filter type="regex" expression="com.comet.*"/>-->
+        <!--context:exclude-filter type="regex" expression="com.justonetech.*.controller.*"/-->
+    </context:component-scan>
+
+    <import resource="applicationContext-datasource.xml"/>
+    <import resource="applicationContext-security.xml"/>
+    <import resource="applicationContext-beans.xml"/>
+    <import resource="applicationContext-mvc.xml"/>
+    <!--<import resource="applicationContext-eai.xml"/>-->
+    <import resource="applicationContext-mail.xml"/>
+    <import resource="applicationContext-sms.xml"/>
+    <import resource="applicationContext-hazelcast.xml"/>
+    <!--<import resource="applicationContext-integration.xml"/>-->
+    <mvc:default-servlet-handler/>
+    <!--<import resource="applicationContext-mvc.xml"/>-->
+</beans>

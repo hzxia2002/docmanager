@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.system.domain">
+	<class
+		name="SysMessageSendBack"
+		table="sys_message_send_back"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system"></meta>
+
+		<id
+			name="id"
+            type="java.lang.Long"
+			column="FD_MESSAGE_ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="fdMessageCode"
+			column="FD_MESSAGE_CODE"
+			type="string"
+			not-null="false"
+			length="100"
+        />
+
+		<property
+			name="fdMessageBody"
+			column="FD_MESSAGE_BODY"
+			type="binary"
+			not-null="false"
+        />
+
+		<property
+			name="fdMessageState"
+			column="FD_MESSAGE_STATE"
+			type="java.lang.Integer"
+			not-null="false"
+			length="3"
+        />
+
+		<property
+			name="fdMessageStateInfo"
+			column="FD_MESSAGE_STATE_INFO"
+			type="string"
+			not-null="false"
+			length="400"
+        />
+
+		<property
+			name="fdMessageSendTime"
+			column="FD_MESSAGE_SEND_TIME"
+			type="timestamp"
+			not-null="false"
+			length="19"
+        />
+
+		<property
+			name="fdMessageGroupName"
+			column="FD_MESSAGE_GROUP_NAME"
+			type="string"
+			not-null="false"
+			length="100"
+        />
+
+		<property
+			name="fdMessageOperateTime"
+			column="FD_MESSAGE_OPERATE_TIME"
+			type="timestamp"
+			not-null="false"
+			length="19"
+        />
+
+		<property
+			name="fdMessageOperateVersion"
+			column="FD_MESSAGE_OPERATE_VERSION"
+			type="java.lang.Integer"
+			not-null="false"
+			length="3"
+        />
+
+		<property
+			name="fdMessageOperateInfo"
+			column="FD_MESSAGE_OPERATE_INFO"
+			type="string"
+			not-null="false"
+			length="400"
+        />
+
+
+
+	</class>	
+    <query name="sysmessagesendback_all_data_query">
+        <![CDATA[FROM SysMessageSendBack]]>
+    </query>
+</hibernate-mapping>

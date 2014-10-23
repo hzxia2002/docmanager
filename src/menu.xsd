@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ul" type="ulType"/>
+  <xs:complexType name="liType">
+    <xs:sequence>
+      <xs:element type="aType" name="a"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="aType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="href" use="optional"/>
+        <xs:attribute type="xs:string" name="func" use="optional"/>
+          <!--<xs:attribute type="xs:string" name="target" use="optional"/>-->
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ulType">
+    <xs:sequence>
+      <xs:element type="liType" name="li" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

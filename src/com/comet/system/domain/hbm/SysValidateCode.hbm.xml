@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.system.domain">
+	<class
+		name="SysValidateCode"
+		table="SYS_VALIDATE_CODE"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+        <meta attribute="tableName">SYS_VALIDATE_CODE</meta>
+        <meta attribute="tableComment">校验码临时表</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system"></meta>
+
+		<id
+			name="id"
+			type="long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="nickName"
+			column="NICK_NAME"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">NICK_NAME</meta>
+            <meta attribute="ColumnComment">昵称</meta>
+        </property>
+        
+		<property
+			name="mac"
+			column="MAC"
+			type="string"
+			not-null="false"
+			length="20"
+        >
+            <meta attribute="ColumnName">MAC</meta>
+            <meta attribute="ColumnComment">MAC</meta>
+        </property>
+
+		<property
+			name="email"
+			column="EMAIL"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">EMAIL</meta>
+            <meta attribute="ColumnComment">邮件</meta>
+        </property>
+
+		<property
+			name="mobile"
+			column="MOBILE"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">MOBILE</meta>
+            <meta attribute="ColumnComment">移动电话</meta>
+        </property>
+
+		<property
+			name="validateCode"
+			column="VALIDATE_CODE"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">VALIDATE_CODE</meta>
+            <meta attribute="ColumnComment">检验码</meta>
+        </property>
+
+		<property
+			name="sessionId"
+			column="SESSION_ID"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">SESSION_ID</meta>
+            <meta attribute="ColumnComment">Session ID</meta>
+        </property>
+
+		<property
+			name="validateCodeType"
+			column="VALIDATE_CODE_TYPE"
+			type="string"
+			not-null="false"
+			length="2"
+        >
+            <meta attribute="ColumnName">VALIDATE_CODE_TYPE</meta>
+            <meta attribute="ColumnComment">校验码类型(0-用户注册;1-找回密码)</meta>
+        </property>
+
+		<property
+			name="createTime"
+			column="CREATE_TIME"
+			type="timestamp"
+			not-null="false"
+			length="19"
+        >
+            <meta attribute="ColumnName">CREATE_TIME</meta>
+            <meta attribute="ColumnComment">创建时间</meta>
+        </property>
+
+		<property
+			name="updateTime"
+			column="UPDATE_TIME"
+			type="timestamp"
+			not-null="false"
+			length="19"
+        >
+            <meta attribute="ColumnName">UPDATE_TIME</meta>
+            <meta attribute="ColumnComment">更新时间</meta>
+        </property>
+
+		<property
+			name="updateUser"
+			column="UPDATE_USER"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">UPDATE_USER</meta>
+            <meta attribute="ColumnComment">更新人(记录帐号）</meta>
+        </property>
+
+        <property
+                name="valid"
+                column="IS_VALID"
+                type="java.lang.Boolean"
+                not-null="false"
+                length="1"
+                >
+            <meta attribute="ColumnName">IS_VALID</meta>
+            <meta attribute="ColumnComment">是否有效</meta>
+        </property>
+
+        <property
+                name="sendResult"
+                column="SEND_RESULT"
+                type="java.lang.Boolean"
+                not-null="false"
+                length="1"
+                >
+            <meta attribute="ColumnName">SEND_RESULT</meta>
+            <meta attribute="ColumnComment">发送结果</meta>
+        </property>
+
+        <property
+                name="resultCode"
+                column="RESULT_CODE"
+                type="string"
+                not-null="false"
+                length="20"
+                >
+            <meta attribute="ColumnName">RESULT_CODE</meta>
+            <meta attribute="ColumnComment">发送结果</meta>
+        </property>
+
+        <property
+                name="resultMsg"
+                column="RESULT_MSG"
+                type="string"
+                not-null="false"
+                length="200"
+                >
+            <meta attribute="ColumnName">RESULT_MSG</meta>
+            <meta attribute="ColumnComment">发送结果消息</meta>
+        </property>
+
+        <property
+                name="expireTime"
+                column="EXPIRE_TIME"
+                type="timestamp"
+                not-null="false"
+                length="19"
+                >
+            <meta attribute="ColumnName">EXPIRE_TIME</meta>
+            <meta attribute="ColumnComment">过期时间</meta>
+        </property>
+
+		<property
+			name="createUser"
+			column="CREATE_USER"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">CREATE_USER</meta>
+            <meta attribute="ColumnComment">创建人(记录帐号）</meta>
+        </property>
+
+
+
+	</class>	
+    <query name="bizvalidatecode_all_data_query">
+        <![CDATA[FROM SysValidateCode]]>
+    </query>
+</hibernate-mapping>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+       default-autowire="byName">
+
+    <!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd -->
+    <!--<util:properties id="applicationProps" location="classpath:application.properties"/>-->
+    <!--suppress SpringModelInspection -->
+    <mvc:resources mapping="/uploads/**" location="file:${filePath}"/>
+    <mvc:resources mapping="/common/**" location="/common/"/>
+    <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
+    <!--<mvc:resources mapping="/img/**" location="/img/"/>-->
+    <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
+    <!--<mvc:resources mapping="/css/**" location="/css/"/>-->
+    <!--<mvc:resources mapping="/html/**" location="/html/"/>-->
+    <!--<mvc:default-servlet-handler/>-->
+    <!-- Controller的包，使容器启动的时候可以找的并实例化Controller -->
+    <!--<context:component-scan base-package="com.icombo"/>-->
+
+    <!-- ControllerClassNameHandlerMapping用于匹配我们的Controller -->
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping">
+        <property name="caseSensitive" value="true"/>
+    </bean>
+
+    <bean id="jacksonDateMapper" class="com.comet.core.jackson.mapper.DateMapper">
+        <property name="mask" value="yyyy-MM-dd HH:mm:ss" />
+    </bean>
+
+    <!-- 使用annocation创建Controller的bean,同时注入属性编辑器 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="cacheSeconds" value="0"/>
+        <property name="webBindingInitializer">
+            <bean class="com.comet.core.editor.BindingInitializer"/>
+        </property>
+        <!-- 配置一下对json数据的转换 -->
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                    <property name="objectMapper" ref="jacksonDateMapper" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 文件上传支持Bean -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="20480000"/>
+    </bean>
+
+    <!--Method Mapping -->
+    <bean id="methodNameResolver"
+          class="org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver"/>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.dao.DataAccessException">error</prop>
+                <prop key="org.springframework.transaction.TransactionException">error</prop>
+                <prop key="java.sql.SQLException">error</prop>
+                <prop key="java.lang.RuntimeException">error</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--
+        - This bean configures the 'prefix' and 'suffix' properties of
+        - InternalResourceViewResolver, which resolves logical view names
+        - returned by Controllers. For example, a logical view name of "vets"
+        - will be mapped to "/WEB-INF/jsp/vets.jsp".
+    -->
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:prefix="/"
+        p:suffix=".jsp"/>
+</beans>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:p="http://www.springframework.org/schema/p"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+
+    <http auto-config="true" access-denied-page="/error/permissionDeny.jsp"
+          access-decision-manager-ref="myAccessDecisionManager">
+        <intercept-url pattern="/sys*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/main.jsp*" access="ROLE_USER"/>
+        <intercept-url pattern="/home/**.do*" access="ROLE_USER"/>
+        <intercept-url pattern="/admin/**.do*" access="ROLE_USER"/>
+        <intercept-url pattern="/view/**" access="ROLE_USER"/>
+        <intercept-url pattern="/mon*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/userinfo*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/beneficiary*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/userConsumeOrder*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/userProdOrder*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/userRight*/**" access="ROLE_USER"/>
+        <intercept-url pattern="/imageCode.jsp*" filters="none"/>
+        <intercept-url pattern="/theme/**" filters="none"/>
+        <intercept-url pattern="/userinfo*/lookForPwd.do" filters="none"/>
+        <!--
+        <intercept-url pattern="/login.jsp*" filters="none" requires-channel="https"/>
+        <intercept-url pattern="/j_spring_security_check*" filters="none" requires-channel="https"/>
+        -->
+        <intercept-url pattern="/cxf/*" requires-channel="https"/>
+        <form-login login-page="/login.jsp" authentication-failure-url="/login.jsp?login_error=1"
+                    default-target-url="/login/dispatch.do"/>
+        <logout invalidate-session="true" logout-success-url="/index.jsp" logout-url="/j_spring_security_logout"/>
+        <session-management>
+            <concurrency-control max-sessions="10" error-if-maximum-exceeded="true"/>
+        </session-management>
+        <custom-filter ref="myFilter" before="PRE_AUTH_FILTER"/>
+        <port-mappings>
+            <port-mapping http="8080" https="8443"/>
+        </port-mappings>
+    </http>
+
+    <!-- 设置方法的安全性 -->
+    <global-method-security access-decision-manager-ref="myAccessDecisionManager">
+        <protect-pointcut expression="execution(* com.comet.*Manager.*(..))" access="ROLE_USER"/>
+    </global-method-security>
+
+    <b:bean id="passwordEncoder" class="com.comet.core.security.encoder.CommonPasswordEncoder"/>
+
+    <!--
+       <authentication-provider>
+              <password-encoder ref="passwordEncoder"/>
+       </authentication-provider>
+    -->
+    
+    <!--
+     <b:bean id="authenticationManager"
+             class="org.springframework.security.authentication.ProviderManager">
+         <b:property name="providers">
+             <b:list>
+                 <b:ref local="daoAuthenticationProvider"/>
+             </b:list>
+         </b:property>
+     </b:bean>
+     -->
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="daoAuthenticationProvider"/>
+    </authentication-manager>
+
+    <b:bean id="daoAuthenticationProvider"
+            class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <b:property name="userDetailsService" ref="userDetailsService"/>
+        <b:property name="passwordEncoder" ref="passwordEncoder"/>
+        <b:property name="hideUserNotFoundExceptions" value="false"/>
+        <!--custom-authentication-provider/ -->
+    </b:bean>
+
+    <!-- 登录验证码校核 -->
+    <b:bean id="myFilter" class="com.comet.system.filter.CustomAuthenticationProcessingFilter">
+    </b:bean>
+
+    <!--
+     <b:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+           <b:property name="basename" value="org/springframework/security/messages" />
+     </b:bean>
+      -->
+
+    <b:bean id="userDetailsService" class="com.comet.system.manager.UserDetailServiceImpl"/>
+
+    <b:bean id="myAccessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+        <b:property name="allowIfAllAbstainDecisions" value="false"/>
+        <b:property name="decisionVoters">
+            <b:list>
+                <b:bean class="org.springframework.security.access.vote.RoleVoter"/>
+                <b:bean class="com.comet.core.security.vote.UrlVoter"/>
+                <b:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+            </b:list>
+        </b:property>
+    </b:bean>
+
+    <b:bean id="resourceSecurityInterceptor"
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+        <b:property name="authenticationManager" ref="authenticationManager"/>
+        <b:property name="accessDecisionManager" ref="myAccessDecisionManager"/>
+        <b:property name="securityMetadataSource">
+            <filter-security-metadata-source lowercase-comparisons="true">
+                <intercept-url pattern=".*login\.jsp($|\?.*)" access="ROLE_USER,IS_AUTHENTICATED_ANONYMOUSLY"/>
+                <intercept-url pattern=".*index\.jsp($|\?.*)" access="ROLE_USER,IS_AUTHENTICATED_ANONYMOUSLY"/>
+                <intercept-url pattern=".*resetPwd\.jsp($|\?.*)" access="ROLE_USER,IS_AUTHENTICATED_ANONYMOUSLY"/>
+                <intercept-url pattern=".*userinfo\/lookForPwd\.do($|\?.*)" access="ROLE_USER,IS_AUTHENTICATED_ANONYMOUSLY"/>
+                <intercept-url pattern=".*index1\.jsp($|\?.*)" access="ROLE_USER"/>
+                <intercept-url pattern=".*\.jsp($|\?.*)" access="ROLE_USER"/>
+                <intercept-url pattern=".*\.do($|\?.*)" access="ROLE_USER"/>
+            </filter-security-metadata-source>
+        </b:property>
+        <!--<b:property name="observeOncePerRequest" value="true" />-->
+    </b:bean>
+</b:beans>

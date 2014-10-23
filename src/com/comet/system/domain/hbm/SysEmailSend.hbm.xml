@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.system.domain">
+	<class
+		name="SysEmailSend"
+		table="sys_email_send"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+        <meta attribute="tableName">sys_email_send</meta>
+        <meta attribute="tableComment">Email发送记录</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system"></meta>
+
+		<id
+			name="id"
+			type="long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.IntegerIdGenerator"/>
+		</id>
+
+		<property
+			name="content"
+			column="CONTENT"
+			type="string"
+			not-null="false"
+        >
+            <meta attribute="ColumnName">CONTENT</meta>
+            <meta attribute="ColumnComment">短信内容</meta>
+        </property>
+
+		<property
+			name="receiver"
+			column="RECEIVER"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">RECEIVER</meta>
+            <meta attribute="ColumnComment">接收人</meta>
+        </property>
+
+		<property
+			name="createTime"
+			column="CREATE_TIME"
+			type="timestamp"
+			not-null="false"
+			length="19"
+        >
+            <meta attribute="ColumnName">CREATE_TIME</meta>
+            <meta attribute="ColumnComment">创建时间</meta>
+        </property>
+
+		<property
+			name="createUser"
+			column="CREATE_USER"
+			type="string"
+			not-null="false"
+			length="100"
+        >
+            <meta attribute="ColumnName">CREATE_USER</meta>
+            <meta attribute="ColumnComment">创建人(记录帐号）</meta>
+        </property>
+
+		<property
+			name="sendTime"
+			column="SEND_TIME"
+			type="timestamp"
+			not-null="false"
+			length="19"
+        >
+            <meta attribute="ColumnName">SEND_TIME</meta>
+            <meta attribute="ColumnComment">发送时间</meta>
+        </property>
+
+		<property
+			name="sendResult"
+			column="SEND_RESULT"
+			type="string"
+			not-null="false"
+			length="255"
+        >
+            <meta attribute="ColumnName">SEND_RESULT</meta>
+            <meta attribute="ColumnComment">发送结果</meta>
+        </property>
+
+		<property
+			name="sendStatus"
+			column="SEND_STATUS"
+			type="string"
+			not-null="false"
+			length="2"
+        >
+            <meta attribute="ColumnName">SEND_STATUS</meta>
+            <meta attribute="ColumnComment">发送状态</meta>
+        </property>
+
+        <property
+                name="title"
+                column="TITLE"
+                type="string"
+                not-null="false"
+                length="100"
+                >
+            <meta attribute="ColumnName">TITLE</meta>
+            <meta attribute="ColumnComment">主题</meta>
+        </property>
+
+
+		<many-to-one
+			name="user"
+			column="USER_ID"
+			class="SysUser"
+			not-null="true"
+		>
+		</many-to-one>
+
+
+	</class>	
+    <query name="sysemailsend_all_data_query">
+        <![CDATA[FROM SysEmailSend]]>
+    </query>
+</hibernate-mapping>

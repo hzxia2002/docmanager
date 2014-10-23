@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.cms.domain">
+	<class
+		name="DocDocument"
+		table="doc_document"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+        <meta attribute="tableName">doc_document</meta>
+        <meta attribute="tableComment">文档</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system"></meta>
+
+		<id
+			name="id"
+			type="long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="code"
+			column="CODE"
+			type="string"
+			not-null="false"
+			length="30"
+        >
+            <meta attribute="ColumnName">CODE</meta>
+            <meta attribute="ColumnComment">文档编码</meta>
+        </property>
+
+		<property
+			name="path"
+			column="PATH"
+			type="string"
+			not-null="false"
+			length="80"
+        >
+            <meta attribute="ColumnName">PATH</meta>
+            <meta attribute="ColumnComment">文档路径</meta>
+        </property>
+
+	
+<!--
+
+		<set name="docAttachments" inverse="true">
+			<key column="DOC_ID"/>
+			<one-to-many class="DocAttachments"/>
+		</set>
+
+-->
+
+
+	</class>	
+    <query name="docdocument_all_data_query">
+        <![CDATA[FROM DocDocument]]>
+    </query>
+</hibernate-mapping>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.system.domain">
+	<class
+		name="SysMessageInfo"
+		table="sys_message_info"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system"></meta>
+
+		<id
+			name="id"
+            type="java.lang.Long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="fdMessageCode"
+			column="FD_MESSAGE_CODE"
+			type="string"
+			not-null="true"
+			length="100"
+        />
+
+		<property
+			name="fdMessageHandlerName"
+			column="FD_MESSAGE_HANDLER_NAME"
+			type="string"
+			not-null="false"
+			length="500"
+        />
+
+		<property
+			name="fdMessageState"
+			column="FD_MESSAGE_STATE"
+			type="java.lang.Integer"
+			not-null="false"
+			length="3"
+        />
+
+		<property
+			name="fdMessageDesc"
+			column="FD_MESSAGE_DESC"
+			type="string"
+			not-null="false"
+			length="1000"
+        />
+
+		<property
+			name="fdMessageGroupName"
+			column="FD_MESSAGE_GROUP_NAME"
+			type="string"
+			not-null="false"
+			length="100"
+        />
+
+		<property
+			name="fdMessageType"
+			column="FD_MESSAGE_TYPE"
+			type="string"
+			not-null="false"
+			length="10"
+        />
+
+		<property
+			name="fdBusinessModule"
+			column="FD_BUSINESS_MODULE"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessFunction"
+			column="FD_BUSINESS_FUNCTION"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessParaOne"
+			column="FD_BUSINESS_PARA_ONE"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessParaTwo"
+			column="FD_BUSINESS_PARA_TWO"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessParaThree"
+			column="FD_BUSINESS_PARA_THREE"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessParaFour"
+			column="FD_BUSINESS_PARA_FOUR"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessParaFive"
+			column="FD_BUSINESS_PARA_FIVE"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+		<property
+			name="fdBusinessParaSix"
+			column="FD_BUSINESS_PARA_SIX"
+			type="string"
+			not-null="false"
+			length="200"
+        />
+
+
+
+	</class>	
+    <query name="sysmessageinfo_all_data_query">
+        <![CDATA[FROM SysMessageInfo]]>
+    </query>
+</hibernate-mapping>

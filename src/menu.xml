@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <ul id="1" text="系统管理">
+        <li><a href="/map.html">地图示例</a></li>
+        <li><a href="view/sp/grid.jsp">列表示例</a></li>
+        <li><a href="view/sp/form.jsp" >Form示例</a></li>
+    </ul>
+    <ul id="2" text="文档管理">
+        <li><a href="/documentDirectory/grid.do" >文档目录</a></li>
+        <li><a href="/document/tree.do" >文档维护</a></li>
+    </ul>
+</menu>

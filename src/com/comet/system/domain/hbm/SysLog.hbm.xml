@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.system.domain">
+	<class
+		name="com.comet.system.domain.SysLog"
+		table="SYS_LOG"
+	>
+		
+		<meta attribute="sync-DAO">false</meta>
+		<meta attribute="sync-jsp">true</meta>
+		<meta attribute="sync-boolean">get</meta>
+		<meta attribute="treeable">false</meta>
+		<meta attribute="projectable">false</meta>
+        <meta attribute="tableName">用户日志</meta>
+        <meta attribute="tableComment">用户日志</meta>
+	    <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system">system</meta>
+
+		<id
+			name="id"
+			type="java.lang.Long"
+			column="ID"
+		>
+			<generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+		</id>
+
+		<property
+			name="ipAddress"
+			column="IP_ADDRESS"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">IP地址</meta>
+            <meta attribute="ColumnComment">IP地址</meta>
+        </property>
+
+		<property
+			name="enterTime"
+			column="ENTER_TIME"
+			type="timestamp"
+			not-null="false"
+			length="7"
+        >
+            <meta attribute="ColumnName">进入时间</meta>
+            <meta attribute="ColumnComment">记录时间：记录进入当前页面时间</meta>
+        </property>
+
+		<property
+			name="outTime"
+			column="OUT_TIME"
+			type="timestamp"
+			not-null="false"
+			length="7"
+        >
+            <meta attribute="ColumnName">完成时间</meta>
+            <meta attribute="ColumnComment">完成时间：记录退出当前页面时间</meta>
+        </property>
+
+		<property
+			name="pageUrl"
+			column="PAGE_URL"
+			type="string"
+			not-null="false"
+			length="200"
+        >
+            <meta attribute="ColumnName">访问页面</meta>
+            <meta attribute="ColumnComment">访问页面</meta>
+        </property>
+
+		<property
+			name="ieVersion"
+			column="IE_VERSION"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">浏览器版本</meta>
+            <meta attribute="ColumnComment">浏览器版本</meta>
+        </property>
+
+		<property
+			name="sessionid"
+			column="SESSIONID"
+			type="string"
+			not-null="false"
+			length="50"
+        >
+            <meta attribute="ColumnName">SESSIONID</meta>
+            <meta attribute="ColumnComment">SESSION_ID</meta>
+        </property>
+
+		<many-to-one
+			name="user"
+			column="USER_ID"
+			class="com.comet.system.domain.SysUser"
+			not-null="false"
+		>
+		</many-to-one>
+		<many-to-one
+			name="logType"
+			column="LOG_TYPE"
+			class="com.comet.system.domain.SysCodeDetail"
+			not-null="false"
+		>
+		</many-to-one>
+
+
+	</class>	
+    <query name="syslog_all_data_query">
+        <![CDATA[FROM SysLog]]>
+    </query>
+</hibernate-mapping>
