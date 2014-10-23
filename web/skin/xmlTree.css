@@ -1,0 +1,10 @@
+*{margin:0;padding:0;list-style-type:none;font-size:12px;}
+a,img{border:0;}
+.tree,.tree ul,.tree li{list-style:none;margin:0;padding:0;}
+.tree ul{margin-left:18px;}
+.tree li a{color:#555;padding:0.2em 7px 0.2em 27px;display:block;text-decoration:none;border:1px dashed #fff;background:url(icons/icon-file.gif) 5px 50% no-repeat;}
+.tree li a.tree-parent{background:url(icons/expand.jpg) 5px 50% no-repeat;}
+.tree li a.tree-parent-collapsed{background:url(icons/collapse.jpg) 5px 50% no-repeat;}
+.tree li a:hover,.tree li a.tree-parent:hover,.tree li a:focus,.tree li a.tree-parent:focus,.tree li a.tree-item-active{color: #cc8833;border:1px solid#eee;background-color: #ccc6ff;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+.tree li a:focus,.tree li a.tree-parent:focus,.tree li a.tree-item-active{border:1px solid #e2f3fb;background-color:#f2fafd;}
+.tree ul.tree-group-collapsed{display:none;}
