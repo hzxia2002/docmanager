@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <description>translate</description>
+    <display-name>translate</display-name>
+
+    <!--
+     默认的spring配置文件是在WEB-INF下的applicationContext.xml
+     Spring 容器启动监听器
+      -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:applicationContext.xml
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Spring 刷新Introspector防止内存泄露 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.comet.core.listener.StartupListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>com.comet.core.security.count.UserSessionListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Hibernate Open Session In View filter-->
+    <filter>
+        <filter-name>osivFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>osivFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>osivFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+
+
+    <!--压缩-->
+    <filter>
+        <filter-name>compressionFilter</filter-name>
+        <filter-class>net.sf.ehcache.constructs.web.filter.GzipFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>compressionFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>compressionFilter</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <!--<filter-mapping>-->
+    <!--<filter-name>compressionFilter</filter-name>-->
+    <!--<url-pattern>*.css</url-pattern>-->
+    <!--</filter-mapping>-->
+    <filter-mapping>
+        <filter-name>compressionFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>compressionFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>compressionFilter</filter-name>
+        <url-pattern>*.json</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <display-name>Transaction</display-name>
+        <servlet-name>Transaction</servlet-name>
+        <servlet-class>com.citictrust.trust.chinapay.servlet.TransactionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <display-name>test</display-name>
+        <servlet-name>test</servlet-name>
+        <servlet-class>http://payment-test.chinapay.com/pay/TransGet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <display-name>WhiteList</display-name>
+        <servlet-name>WhiteList</servlet-name>
+        <servlet-class>com.citictrust.trust.chinapay.servlet.WhiteListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <display-name>WhiteListReturn</display-name>
+        <servlet-name>WhiteListReturn</servlet-name>
+        <servlet-class>com.citictrust.trust.chinapay.servlet.WhiteListReturnServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>QuerySend</display-name>
+        <servlet-name>QuerySend</servlet-name>
+        <servlet-class>com.citictrust.trust.chinapay.servlet.QuerySendServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>QueryReturn</display-name>
+        <servlet-name>QueryReturn</servlet-name>
+        <servlet-class>com.citictrust.trust.chinapay.servlet.QueryReturnServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>TransactionReturn</display-name>
+        <servlet-name>TransactionReturn</servlet-name>
+        <servlet-class>com.citictrust.trust.chinapay.servlet.TransactionReturnServlet</servlet-class>
+    </servlet>
+
+
+
+    <servlet-mapping>
+        <servlet-name>Transaction</servlet-name>
+        <url-pattern>/Transaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WhiteList</servlet-name>
+        <url-pattern>/WhiteList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WhiteListReturn</servlet-name>
+        <url-pattern>/WhiteListReturn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>QuerySend</servlet-name>
+        <url-pattern>/QuerySend</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>QueryReturn</servlet-name>
+        <url-pattern>/QueryReturn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransactionReturn</servlet-name>
+        <url-pattern>/TransactionReturn</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>dispatcher</servlet-name>-->
+    <!--<url-pattern>*.json</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>dispatcher</servlet-name>-->
+    <!--<url-pattern>*.css</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>dispatcher</servlet-name>-->
+    <!--<url-pattern>*.gif</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>dispatcher</servlet-name>-->
+    <!--<url-pattern>*.jpg</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>dispatcher</servlet-name>-->
+    <!--<url-pattern>*.js</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!-- web service -->
+    <!--<servlet>-->
+    <!--<description>Apache CXF Endpoint</description>-->
+    <!--<display-name>CXFServlet</display-name>-->
+    <!--<servlet-name>CXFServlet</servlet-name>-->
+    <!--<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>-->
+    <!--<load-on-startup>1</load-on-startup>-->
+    <!--</servlet>-->
+    <!---->
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>CXFServlet</servlet-name>-->
+    <!--<url-pattern>/cxf/*</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- session超时定义,单位为分钟 -->
+    <!--暂定为120分钟-->
+    <session-config>
+        <session-timeout>120</session-timeout>
+    </session-config>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <!-- Displays a stack trace -->
+        <location>/error.jsp</location>
+    </error-page>
+</web-app>
