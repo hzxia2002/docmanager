@@ -7,5 +7,5 @@ import javax.jws.WebService;
  */
 @WebService
 public interface DocWebService {
-    public String login(String userid,String password);
+    public String login(String userid,String password) throws Exception ;
 }

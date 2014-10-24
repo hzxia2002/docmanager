@@ -5,12 +5,7 @@ import com.comet.core.orm.hibernate.QueryTranslate;
 import com.comet.core.utils.BeanMapConvertUtils;
 import com.comet.core.utils.CryptUtil;
 import com.comet.core.utils.DateTimeHelper;
-import com.comet.system.daoservice.SysPersonService;
-import com.comet.system.daoservice.SysPrivilegeService;
-import com.comet.system.daoservice.SysRoleService;
-import com.comet.system.daoservice.SysUserPrivilegeService;
-import com.comet.system.daoservice.SysUserRoleService;
-import com.comet.system.daoservice.SysUserService;
+import com.comet.system.daoservice.*;
 import com.comet.system.domain.SysDept;
 import com.comet.system.domain.SysPerson;
 import com.comet.system.domain.SysPersonDept;
@@ -51,6 +46,9 @@ public class SysUserManager {
 
     @Autowired
     private SysPersonService sysPersonService;
+
+    @Autowired
+    private SysDeptService sysDeptService;
 
     @Autowired
     private SysRoleService sysRoleService;
@@ -218,6 +216,26 @@ public class SysUserManager {
     public SysDept getUserDept(Long id) {
         SysUser user = sysUserService.get(id);
 
+        if (user.getPerson() != null) {
+            String hql = "select t.dept from SysPersonDept t where t.person.id = " + user.getPerson().getId();
+
+            List<SysDept> depts = sysDeptService.find(hql);
+
+            if (depts != null && depts.size() > 0) {
+                return depts.get(0);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 取得人员所在的部门
+     *
+     * @param user 用户
+     * @return 部门
+     */
+    public SysDept getUserDept(SysUser user) {
         SysPerson person = user.getPerson();
 
         if (person != null) {

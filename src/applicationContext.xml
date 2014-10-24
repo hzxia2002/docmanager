@@ -183,7 +183,7 @@
     <import resource="applicationContext-mail.xml"/>
     <import resource="applicationContext-sms.xml"/>
     <import resource="applicationContext-hazelcast.xml"/>
-    <import resource="applicationContext-ws.xml"/>
+    <!--<import resource="applicationContext-ws.xml"/>-->
     <!--<import resource="applicationContext-integration.xml"/>-->
     <mvc:default-servlet-handler/>
     <!--<import resource="applicationContext-mvc.xml"/>-->
