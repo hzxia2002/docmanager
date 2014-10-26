@@ -33,25 +33,16 @@
                 <td>
                     <span class="errors">*</span>内容:
                 </td>
-                <td class="container" height="340" valign="top">
-                    <textarea id="content" name="content" style="width:800px;height: 340px"><c:out value="${bean.content}" /></textarea>
+                <td class="container" height="310" valign="top">
+                    <textarea id="content" name="content" style="width:800px;height: 300px"><c:out value="${bean.content}" /></textarea>
                 </td>
             </tr>
             <tr class="inputTr">
                 <td>
-                    图片:
+                    文件:
                 </td>
                 <td class="container" valign="middle">
-                    <input type="file" id="image" name="image">
-                        <span id="picSpan">
-                        <c:if test="${not empty bean.thumbPath}">
-                            <a href="${ctx}${bean.thumbPath}" target="_blank">查看</a>&nbsp;
-                            <a href="javascript:void(0);" onclick="javascript:deleteFile('0');">删除</a>
-                        </c:if>
-                        </span>
-                    &nbsp;
-                    <span class="errors">${msg}</span>
-                    文件:<input type="file" id="file" name="file">
+                    <input type="file" id="file" name="file">
                         <span id="fileSpan">
                         <c:if test="${not empty bean.attachPath}">
                             <a href="${ctx}${bean.attachPath}" target="_blank">附件</a>
@@ -61,13 +52,20 @@
                         </span>
                 </td>
             </tr>
-            <tr class="inputTr">
+            <tr class="inputTr" height="28">
+                <td>
+                    接收人:
+                </td>
+                <td class="container" valign="middle">
+                    <input type="button" id="selectReceiver" value="请选择" >
+                </td>
+            </tr>
+            <tr class="inputTr" height="28">
                 <td>
                     发布时间:
                 </td>
                 <td class="container">
                     <input type="text" id="publishDate" name="publishDate" class="Wdate" value="${bean.publishDate}" onFocus="WdatePicker({isShowClear:false,readOnly:true})" style="width: 120px"/>&nbsp;
-
                     是否置顶:
                     <form:checkbox path="isTop" />
 
@@ -78,7 +76,7 @@
                     <input type="text" name="keyword" id="keyword" value="${bean.keyword}" class="input_table" size="50" maxlength="100"/>&nbsp;
                 </td>
             </tr>
-            <tr class="inputTr">
+            <tr class="inputTr" height="28">
                 <td>
                     外部链接:
                 </td>
@@ -87,7 +85,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" valign="middle" align="center">
+                <td colspan="2" valign="middle" align="center" height="30">
                     <input type="button" id="formCmsArticleButtonNew" value="新增" >&nbsp;
                     <input type="button" id="formCmsArticleButtonSave" value="保存" >&nbsp;
                     <input type="button" value="取消" onclick="doClose();">

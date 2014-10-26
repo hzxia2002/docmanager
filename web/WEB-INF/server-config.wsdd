@@ -44,7 +44,7 @@
  </transport>
 
 	<service name="docWebService" provider="java:RPC">
-		<parameter name="className" value="com.comet.doc.webservice.DocWebServiceImpl"/>
+		<parameter name="className" value="com.comet.cms.webservice.DocWebServiceImpl"/>
 		<parameter name="allowedMethods" value="*"/>    
 	</service>     
 </deployment>

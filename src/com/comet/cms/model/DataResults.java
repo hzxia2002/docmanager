@@ -1,4 +1,4 @@
-package com.comet.doc.model;
+package com.comet.cms.model;
 
 import java.util.List;
 

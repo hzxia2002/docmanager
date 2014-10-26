@@ -1,4 +1,4 @@
-package com.comet.doc.webservice;
+package com.comet.cms.webservice;
 
 import javax.jws.WebService;
 

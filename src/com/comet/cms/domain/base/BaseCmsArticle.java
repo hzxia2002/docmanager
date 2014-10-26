@@ -40,6 +40,10 @@ public abstract class BaseCmsArticle implements Serializable, Auditable {
 	public static String PROP_IS_VALID = "isValid";
 	public static String PROP_IS_TOP = "isTop";
 	public static String PROP_ATTACH_PATH = "attachPath";
+	public static String PROP_ATTACH_PATH2 = "attachPath2";
+	public static String PROP_ATTACH_PATH3 = "attachPath3";
+	public static String PROP_ATTACH_PATH4 = "attachPath4";
+	public static String PROP_ATTACH_PATH5 = "attachPath5";
 	public static String PROP_THUMB_PATH = "thumbPath";
 	public static String PROP_LINK_URL = "linkUrl";
 	public static String PROP_KEYWORD = "keyword";
@@ -81,6 +85,10 @@ public abstract class BaseCmsArticle implements Serializable, Auditable {
     private Boolean isTop;
 
     private String attachPath;
+    private String attachPath2;
+    private String attachPath3;
+    private String attachPath4;
+    private String attachPath5;
 
     private String thumbPath;
 
@@ -107,7 +115,6 @@ public abstract class BaseCmsArticle implements Serializable, Auditable {
 	// many to one
 	private CmsCategory category;
 	private SysCodeDetail accessRange;
-
 
 	/**
 	 * Return the unique identifier of this class
@@ -183,6 +190,38 @@ public abstract class BaseCmsArticle implements Serializable, Auditable {
 
     public void setAttachPath(String attachPath) {
         this.attachPath = attachPath;
+    }
+
+    public String getAttachPath2() {
+        return attachPath2;
+    }
+
+    public void setAttachPath2(String attachPath2) {
+        this.attachPath2 = attachPath2;
+    }
+
+    public String getAttachPath3() {
+        return attachPath3;
+    }
+
+    public void setAttachPath3(String attachPath3) {
+        this.attachPath3 = attachPath3;
+    }
+
+    public String getAttachPath4() {
+        return attachPath4;
+    }
+
+    public void setAttachPath4(String attachPath4) {
+        this.attachPath4 = attachPath4;
+    }
+
+    public String getAttachPath5() {
+        return attachPath5;
+    }
+
+    public void setAttachPath5(String attachPath5) {
+        this.attachPath5 = attachPath5;
     }
 
     public String getThumbPath() {
@@ -290,6 +329,10 @@ public abstract class BaseCmsArticle implements Serializable, Auditable {
 		builder.append(isValid);
 		builder.append(isTop);
 		builder.append(attachPath);
+		builder.append(attachPath2);
+		builder.append(attachPath3);
+		builder.append(attachPath4);
+		builder.append(attachPath5);
 		builder.append(thumbPath);
 		builder.append(linkUrl);
 		builder.append(createTime);

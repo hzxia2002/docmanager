@@ -105,6 +105,50 @@
         </property>
 
         <property
+                name="attachPath2"
+                column="ATTACH_PATH2"
+                type="string"
+                not-null="false"
+                length="500"
+                >
+            <meta attribute="ColumnName">图片/附件路径</meta>
+            <meta attribute="ColumnComment">图片/附件路径</meta>
+        </property>
+
+        <property
+                name="attachPath3"
+                column="ATTACH_PATH3"
+                type="string"
+                not-null="false"
+                length="500"
+                >
+            <meta attribute="ColumnName">图片/附件路径</meta>
+            <meta attribute="ColumnComment">图片/附件路径</meta>
+        </property>
+
+        <property
+                name="attachPath4"
+                column="ATTACH_PATH4"
+                type="string"
+                not-null="false"
+                length="500"
+                >
+            <meta attribute="ColumnName">图片/附件路径</meta>
+            <meta attribute="ColumnComment">图片/附件路径</meta>
+        </property>
+
+        <property
+                name="attachPath5"
+                column="ATTACH_PATH5"
+                type="string"
+                not-null="false"
+                length="500"
+                >
+            <meta attribute="ColumnName">图片/附件路径</meta>
+            <meta attribute="ColumnComment">图片/附件路径</meta>
+        </property>
+
+        <property
                 name="thumbPath"
                 column="THUMB_PATH"
                 type="string"

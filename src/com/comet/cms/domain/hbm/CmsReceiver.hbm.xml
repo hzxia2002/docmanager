@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.comet.cms.domain">
+    <class
+            name="CmsReceiver"
+            table="CMS_RECEIVER"
+            >
+
+        <meta attribute="sync-DAO">false</meta>
+        <meta attribute="sync-jsp">true</meta>
+        <meta attribute="sync-boolean">get</meta>
+        <meta attribute="treeable">false</meta>
+        <meta attribute="projectable">false</meta>
+        <meta attribute="tableName">信息接收者</meta>
+        <meta attribute="tableComment">信息接收者</meta>
+        <meta attribute="sync-templatePatterns">list\w*</meta>
+        <meta attribute="sub-system">oa</meta>
+
+        <id
+                name="id"
+                type="java.lang.Long"
+                column="ID"
+                >
+            <generator class="com.comet.core.orm.hibernate.LongIdGenerator"/>
+        </id>
+
+        <property
+                name="createTime"
+                column="CREATE_TIME"
+                type="timestamp"
+                not-null="false"
+                length="19"
+                >
+            <meta attribute="ColumnName">创建时间</meta>
+            <meta attribute="ColumnComment">创建时间</meta>
+        </property>
+
+        <property
+                name="updateTime"
+                column="UPDATE_TIME"
+                type="timestamp"
+                not-null="false"
+                length="19"
+                >
+            <meta attribute="ColumnName">更新时间</meta>
+            <meta attribute="ColumnComment">更新时间</meta>
+        </property>
+
+        <property
+                name="createUser"
+                column="CREATE_USER"
+                type="string"
+                not-null="false"
+                length="100"
+                >
+            <meta attribute="ColumnName">创建人</meta>
+            <meta attribute="ColumnComment">创建人(记录帐号）</meta>
+        </property>
+
+        <property
+                name="updateUser"
+                column="UPDATE_USER"
+                type="string"
+                not-null="false"
+                length="100"
+                >
+            <meta attribute="ColumnName">更新人</meta>
+            <meta attribute="ColumnComment">更新人(记录帐号）</meta>
+        </property>
+
+        <many-to-one
+                name="article"
+                column="ARTICLE_ID"
+                class="CmsArticle"
+                not-null="false"
+                >
+        </many-to-one>
+
+        <many-to-one
+                name="user"
+                column="USER_ID"
+                class="com.comet.system.domain.SysUser"
+                not-null="false"
+                >
+        </many-to-one>
+
+        <many-to-one
+                name="role"
+                column="ROLE_ID"
+                class="com.comet.system.domain.SysRole"
+                not-null="false"
+                >
+        </many-to-one>
+
+    </class>
+    <query name="cmsreceiver_all_data_query">
+        <![CDATA[FROM CmsReceiver ]]>
+    </query>
+</hibernate-mapping>

@@ -1,8 +1,8 @@
-package com.comet.doc.webservice;
+package com.comet.cms.webservice;
 
 import com.comet.core.utils.CryptUtil;
 import com.comet.core.utils.SpringUtils;
-import com.comet.doc.model.DataResults;
+import com.comet.cms.model.DataResults;
 import com.comet.system.domain.SysDept;
 import com.comet.system.domain.SysUser;
 import com.comet.system.manager.SysUserManager;
