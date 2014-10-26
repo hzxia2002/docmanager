@@ -43,6 +43,8 @@
                 </td>
                 <td class="container" valign="middle">
                     <input type="file" id="file" name="file">
+                    <input type="file" id="file2" name="file">
+                    <input type="file" id="file3" name="file">
                         <span id="fileSpan">
                         <c:if test="${not empty bean.attachPath}">
                             <a href="${ctx}${bean.attachPath}" target="_blank">附件</a>
