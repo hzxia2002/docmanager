@@ -9,9 +9,9 @@
 </head>
 <body>
 <form:form id="cmsArticleEditForm" modelAttribute="bean" name="cmsArticleEditForm" action="${ctx}/cmsArticle/save.do" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="${bean.id}" />
+    <input type="hidden" name="id" id="id" value="${bean.id}" />
     <div>
-        <table border="0" cellspacing="1" width="100%" id="viewTable">
+        <table border="0" cellspacing="1" width="100%" id="viewTable" class="inputTable">
             <tr class="inputTr">
                 <td>
                     <span class="errors">*</span>所在分类:
@@ -22,7 +22,7 @@
                 </td>
             </tr>
             <tr class="inputTr">
-                <td>
+                <td style="height: 28px;">
                     <span class="errors">*</span>标题:
                 </td>
                 <td class="container">
@@ -55,9 +55,19 @@
             <tr class="inputTr" height="28">
                 <td>
                     接收人:
+                    <input type="hidden" id="userIds" name="userIds" value="">
+                    <input type="hidden" id="roleIds" name="roleIds" value="">
                 </td>
                 <td class="container" valign="middle">
-                    <input type="button" id="selectReceiver" value="请选择" >
+                    <table width="100%">
+                        <tr height="25">
+                            <td rowspan="2" style="width: 70px;" align="center"><input type="button" id="selectReceiver" value="请选择"></td>
+                            <td><b>已选角色：</b><span id="roleNames"></span></td>
+                        </tr>
+                        <tr height="25">
+                            <td><b>已选用户：</b><span id="userNames"></span></td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr class="inputTr" height="28">
@@ -135,7 +145,66 @@
 
             $("#cmsArticleEditForm").submit();
         });
+
+        $('#selectReceiver').click(function() {
+            var id = $("#id").val();
+            var url = '${ctx}/cmsReceiver/initSelect.do';
+            if(id) {
+                url += "?articleId=" + id;
+            }
+
+            window.top.$.juiceDialog.open({ title: '接收人选择', name:'receiverSelect',width: 1024, height: 600, url: url, buttons: [
+                { text: '确定', onclick: selectOK },
+                { text: '取消', onclick: dialogCancel }
+            ]
+            });
+            return false;
+
+        });
     });
+
+    function selectOK(item, dialog){
+        var fn = dialog.frame.user_select || dialog.frame.window.user_select;
+        var fn2 = dialog.frame.role_select || dialog.frame.window.role_select;
+        var data = fn();
+
+        var userIds = "";
+        var userNames = "";
+
+        if (data)
+        {
+            // 拼接选中的用户
+            for(var i=0; i<data.length; i++) {
+                var tmp = data[i];
+                userIds += tmp["id"] + ",";
+                userNames += tmp["displayName"] + ",";
+            }
+
+            if (userIds.length > 0) {
+                userIds = userIds.substring(0,userIds.length - 1);
+            }
+
+            if (userNames.length > 0) {
+                userNames = userNames.substring(0,userNames.length - 1);
+            }
+
+            $("#userIds").val(userIds);
+            $("#userNames").html(userNames);
+        }
+
+        var data2 = fn2();
+
+        debugger;
+
+        $("#roleIds").val(data2[0]);
+        $("#roleNames").html(data2[1]);
+
+        dialog.close();
+    }
+
+    function dialogCancel(item, dialog){
+        dialog.close();
+    }
 
     function deleteFile(delType) {
         var id = $("#id").val();

@@ -117,7 +117,9 @@
         if(parentId&&parentId!="root"){
             url +="?category=" + parentId;
         }
-        commonAddOrUpdate(url,"maingrid2",null,"cmsArticleEditForm",{title:"新增",height:600,width:1024,callback:refreshNode, buttons:null});
+//        commonAddOrUpdate(url,"maingrid2",null,"cmsArticleEditForm",{title:"新增",height:600,width:1024,callback:refreshNode, buttons:null});
+
+        parent.f_addTab("cmsArticleNew","公文新增",url);
     }
 
     function doEdit(id){
