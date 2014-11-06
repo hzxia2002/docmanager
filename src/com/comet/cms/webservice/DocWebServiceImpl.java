@@ -1,5 +1,6 @@
 package com.comet.cms.webservice;
 
+import com.comet.cms.domain.CmsTask;
 import com.comet.cms.manager.CmsTaskManager;
 import com.comet.core.orm.hibernate.Page;
 import com.comet.core.utils.CryptUtil;
@@ -208,18 +209,40 @@ public class DocWebServiceImpl implements DocWebService {
 
         dataResults.setResultDataTime(DateTimeHelper.getDate(new Date()));
 
-        dataResults.setResultList(page.getRows());
+        ArrayList<Map> list = new ArrayList<Map>();
+
+        List<CmsTask> rows = page.getRows();
+        for (CmsTask task : rows) {
+            HashMap hashMap = new HashMap();
+            hashMap.put("fileTitle",task.getArticle().getTitle());
+            ArrayList titleList = new ArrayList();
+            HashMap valueMap = new HashMap();
+            String content = task.getArticle().getContent();
+            valueMap.put("value", (content != null && content.length() > 10) ?(content.substring(0,10)+"..."):content);
+            titleList.add(valueMap);
+            hashMap.put("base1", titleList);
+            list.add(hashMap);
+        }
+
+        dataResults.setResultList(list);
         dataResults.setResultDataType("1");
         dataResults.setResultDataDesc("查询数据成功！");
 
         // 服务器端计算是否有下一页
-        int rowCount = dataResults.getRowcount();
-        if((rowsOfpageInt * numpageInt) < rowCount){
+
+        if(page.getTotal()>page.getPage()){
             numpageInt = numpageInt + 1;
             dataResults.setNextpage(numpageInt);
-        }else{
+        }else {
             dataResults.setNextpage(0);
         }
+//        int rowCount = dataResults.getRowcount();
+//        if((rowsOfpageInt * numpageInt) < rowCount){
+//            numpageInt = numpageInt + 1;
+//            dataResults.setNextpage(numpageInt);
+//        }else{
+//            dataResults.setNextpage(0);
+//        }
 
         return dataResultsToJsonStr(dataResults);
     }
