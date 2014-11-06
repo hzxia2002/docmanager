@@ -1,8 +1,10 @@
 package com.comet.cms.controller;
 
 import com.comet.cms.daoservice.CmsArticleService;
-import com.comet.cms.domain.CmsArticle;
-import com.comet.cms.domain.CmsCategory;
+import com.comet.cms.daoservice.CmsReceiverService;
+import com.comet.cms.daoservice.CmsTaskService;
+import com.comet.cms.domain.*;
+import com.comet.cms.utils.CmsUtils;
 import com.comet.core.controller.BaseCRUDActionController;
 import com.comet.core.orm.hibernate.Page;
 import com.comet.core.orm.hibernate.QueryTranslate;
@@ -10,6 +12,10 @@ import com.comet.core.security.util.SpringSecurityUtils;
 import com.comet.core.utils.DateTimeHelper;
 import com.comet.core.utils.FileUtils;
 import com.comet.core.utils.ReflectionUtils;
+import com.comet.system.daoservice.SysUserRoleService;
+import com.comet.system.domain.SysRole;
+import com.comet.system.domain.SysUser;
+import com.comet.system.domain.SysUserRole;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +35,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,6 +51,15 @@ import java.util.Map;
 public class CmsArticleController extends BaseCRUDActionController<CmsCategory> {
     @Autowired
     private CmsArticleService cmsArticleService;
+
+    @Autowired
+    private CmsReceiverService cmsReceiverService;
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+
+    @Autowired
+    private CmsTaskService cmsTaskService;
 
     public static final String[] PERMIT_IMAGE_TYPE = new String[]{"jpg", "jpeg", "gif", "png"};
 
@@ -84,10 +102,10 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
      * @throws Exception
      */
     @RequestMapping
-    public String init(Model model, CmsArticle entity) throws Exception {
+    public String init(Model model, CmsArticlePropertity entity) throws Exception {
         try {
             if(entity != null && entity.getId() != null) {
-                entity = cmsArticleService.get(entity.getId());
+                 entity =  (CmsArticlePropertity)cmsArticleService.get(entity.getId());
             } else if(entity != null) {
                 entity.setPublishDate(new Date(System.currentTimeMillis()));
                 entity.setIsValid(Boolean.TRUE);
@@ -128,7 +146,7 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
      */
     @RequestMapping
     public String save(HttpServletRequest request, HttpServletResponse response, Model model,
-                       @ModelAttribute("bean") CmsArticle entity)
+                       @ModelAttribute("bean") CmsArticlePropertity entity)
             throws Exception {
         try {
             String[] columns = new String[]{
@@ -141,6 +159,7 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                     "linkUrl",
                     "keyword"
             };
+            String[] columns2 = new String[]{"roleIds","userIds"};
 
             // 如果有图片，上传图片
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -195,7 +214,9 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                 target.setUpdateUser(SpringSecurityUtils.getCurrentUser().getLoginName());
                 target.setUpdateTime(DateTimeHelper.getTimestamp());
             } else {
-                target = entity;
+//                target = entity;
+                target = new CmsArticle();
+                ReflectionUtils.copyBean(entity, target, columns);
 
                 target.setCreateUser(SpringSecurityUtils.getCurrentUser().getLoginName());
                 target.setCreateTime(DateTimeHelper.getTimestamp());
@@ -211,8 +232,55 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             }
 
             cmsArticleService.save(target);
-
-            model.addAttribute("bean", target);
+            String roleIds = entity.getRoleIds();
+            String userIds = entity.getUserIds();
+            String roles[]=roleIds.split(",");
+            String users[]=userIds.split(",");
+            Map param = new HashMap();
+            CmsReceiver cmsReceiver;
+            CmsTask cmsTask;
+            SysRole sysRole;
+            SysUser sysUser;
+            List<SysUserRole> result;
+            List<CmsReceiver> result1;
+            if(roleIds!=null||!roleIds.equals("")){
+                for(String role:roles){
+                    result = sysUserRoleService.find(" from SysUserRole  where  role = "+role);
+                    for(int i=0;i<result.size();i++){
+                        cmsReceiver = new CmsReceiver();
+                        cmsTask = new CmsTask();
+                        sysRole = new SysRole();
+                        sysUser = new SysUser();
+                        sysUser.setId(result.get(i).getUser().getId());
+                        sysRole.setId(Long.valueOf(role));
+                        cmsReceiver.setUser(sysUser);
+                        cmsReceiver.setRole(sysRole);
+                        cmsReceiver.setArticle(target);
+                        cmsTask.setArticle(target);
+                        cmsTask.setUser(sysUser);
+                        cmsReceiverService.save(cmsReceiver);
+                        cmsTaskService.save(cmsTask);
+                    }
+                }
+            }
+            if(userIds!=null||!userIds.equals("")){
+                for(String user:users){
+                    result1 = cmsReceiverService.find(" from CmsReceiver  where  user = "+user);
+                    for(int i=0;i<result1.size();i++){
+                        cmsReceiver = new CmsReceiver();
+                        cmsTask = new CmsTask();
+                        sysUser = new SysUser();
+                        sysUser.setId(result1.get(i).getUser().getId());
+                        cmsReceiver.setUser(sysUser);
+                        cmsReceiver.setArticle(target);
+                        cmsTask.setArticle(target);
+                        cmsTask.setUser(sysUser);
+                        cmsReceiverService.save(cmsReceiver);
+                        cmsTaskService.save(cmsTask);
+                    }
+                }
+            }
+            model.addAttribute("bean", entity);
         } catch (Exception e) {
             log.error("error", e);
             super.processException(response, e);
@@ -341,4 +409,5 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             }
         }
     }
+
 }

@@ -64,10 +64,10 @@
                     <table width="100%">
                         <tr height="25">
                             <td rowspan="2" style="width: 70px;" align="center"><input type="button" id="selectReceiver" value="请选择"></td>
-                            <td><b>已选角色：</b><span id="roleNames"></span></td>
+                            <td><b>已选角色：</b><input id="roleNames" name="roleNames" value="${bean.roleNames}" readonly /></td>
                         </tr>
                         <tr height="25">
-                            <td><b>已选用户：</b><span id="userNames"></span></td>
+                            <td><b>已选用户：</b><input id="userNames" name="userNames" value="${bean.userNames}" readonly /></td>
                         </tr>
                     </table>
                 </td>
@@ -191,7 +191,7 @@
             }
 
             $("#userIds").val(userIds);
-            $("#userNames").html(userNames);
+            $("#userNames").val(userNames);
         }
 
         var data2 = fn2();
@@ -199,7 +199,7 @@
         debugger;
 
         $("#roleIds").val(data2[0]);
-        $("#roleNames").html(data2[1]);
+        $("#roleNames").val(data2[1]);
 
         dialog.close();
     }

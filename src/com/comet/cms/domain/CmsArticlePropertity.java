@@ -1,26 +1,19 @@
 package com.comet.cms.domain;
 
-import com.comet.cms.domain.base.BaseCmsReceiver;
-
 /**
  * Created with IntelliJ IDEA.
- * User: dell
- * Date: 12-5-14
- * Time: 下午9:06
+ * User: Administrator
+ * Date: 14-11-6
+ * Time: 下午8:49
  * To change this template use File | Settings | File Templates.
  */
-public class CmsReceiver extends BaseCmsReceiver {
+public class CmsArticlePropertity extends CmsArticle {
     private static final long serialVersionUID = 1L;
 
-    private String roleNames;
-    private String userNames;
-    private String userIds;
-    private String roleIds;
-
-    /*[CONSTRUCTOR MARKER BEGIN]*/
-    public CmsReceiver() {
-        super();
-    }
+    private String roleNames="";
+    private String userNames="";
+    private String userIds="";
+    private String roleIds="";
 
     public String getRoleNames() {
         return roleNames;
@@ -53,5 +46,4 @@ public class CmsReceiver extends BaseCmsReceiver {
     public void setRoleIds(String roleIds) {
         this.roleIds = roleIds;
     }
-
 }
