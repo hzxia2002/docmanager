@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:dexpt.handler.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dxDataSource" parent="dataSource" />
+
+	<!--  dataSource
+	<bean id="dxDataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/icombohome?useUnicode=true&amp;characterEncoding=utf-8" />
+		<property name="username" value="icombohome" />
+		<property name="password" value="icombohome" />
+		<property name="initialSize" value="40"/>
+		<property name="maxActive" value="50"/>-->
+		<!-- 
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="300"/>
+		<property name="logAbandoned" value="true"/>
+
+	</bean>-->
+
+        <!-- Dx Message Handler -->
+        <bean id="leiDispatcher"
+              class="com.comet.eai.ext.eaiimpl.LeiMessageDispatcher"
+              init-method="init"
+              destroy-method="release">
+            <property name="handlerRepository"
+                      ref="messageContextHandlerRepository"
+                    />
+        </bean>
+
+    <bean id="defaultDispatcher"
+          class="com.comet.eai.dispatcher.DefaultDispatcher"
+          init-method="init"
+          destroy-method="release">
+        <property name="handlerRepository"
+                  ref="messageContextHandlerRepository"
+                />
+    </bean>
+
+
+    <bean id="messageContextHandlerRepository"
+          class="com.comet.eai.ext.MessageContextHandlerRepository"
+          init-method="init"
+          destroy-method="release">
+        <property name="messageMappingInfoCache" ref="messageMappingInfoCache" />
+    </bean>
+
+    <!-- Dx Message Sender 	-->
+    <bean id="dexpt"
+          class="com.comet.eai.wsinterface.DexptWSImpl">
+        <!--<property name="url"-->
+                  <!--value="${dexpt.client.dexpt.url}" />-->
+        <!--<property name="appCode" value="${dexpt.client.dexpt.appCode}" />-->
+        <!--<property name="appCodeByMsg" value="true"/>-->
+    </bean>
+
+    <!--  Lei Dexpt -->
+    <bean id="leiDexpt"
+          class="com.comet.eai.ext.eaiimpl.LeiDexpt">
+        <!--<property name="dexpt" ref="dexptJMS" />-->
+        <property name="sendMessageDao" ref="sendMessageDao" />
+        <property name="cacheAll" value="true" />
+    </bean>
+
+    <bean id="receiveMessageDao"
+          class="com.comet.eai.ext.data.ReceiveMessageDao">
+        <property name="dataSource" ref="dxDataSource" />
+    </bean>
+
+    <bean id="sendMessageDao"
+          class="com.comet.eai.ext.data.SendMessageDao">
+        <property name="dataSource" ref="dxDataSource" />
+    </bean>
+
+    <bean id="handeThreadPool"
+          class="com.comet.eai.ext.util.FixedPooledExecutor">
+        <constructor-arg value="${dexpt.client.threadPool.count}" />
+    </bean>
+
+    <bean id="messageGroupCache"
+          class="com.comet.eai.ext.eaiimpl.LeiMessageGroupCache"
+          init-method="init">
+        <!--
+            <property name="groupMap">
+            <map>
+            <entry key="group1">
+            <bean
+            class="com.comet.eai.ext.MessageGroup">
+            <property name="blocked"
+            value="true"/>
+            </bean>
+            </entry>
+            <entry key="group2">
+            <null/>
+            </entry>
+            <entry
+            key="group3">
+            <null/>
+            </entry>
+            </map>
+            </property>
+
+            <property
+            name="dataSource" ref="dxDataSource"/>
+        -->
+        <property name="leiMessageMappingInfoCache"
+                  ref="messageMappingInfoCache"
+                />
+    </bean>
+
+    <bean id="messageMappingInfoCache"
+          class="com.comet.eai.ext.eaiimpl.LeiMessageMappingInfoCache"
+          init-method="init"
+          destroy-method="release">
+        <property name="dataSource" ref="dxDataSource" />
+    </bean>
+
+    <!-- receive and write into db...-->
+    <bean id="receiver"
+          class="com.comet.eai.ext.eaiimpl.LeiReceiver">
+        <property name="receiveMessageDao" ref="receiveMessageDao" />
+        <property name="messageMappingInfoCache" ref="messageMappingInfoCache"/>
+    </bean>
+
+    <!-- handler impl -->
+    <bean name="handlerJob"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass">
+            <value>com.comet.eai.ext.eaiimpl.HandlerJob5</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <!-- for job4
+                <entry key="messageDao" value-ref="receiveMessageDao" />
+                <entry
+                    key="threadPool" value-ref="handeThreadPool" />
+                <entry key="messageGroupCache"
+                    value-ref="messageGroupCache"/>
+                <entry key="dispatcher" value-ref="leiDispatcher"
+                    />
+                <entry key="blocked" value="true" /> -->
+                <entry key="messageDao" value-ref="receiveMessageDao" />
+                <entry key="threadPool" value-ref="handeThreadPool" />
+                <entry key="dispatcher" value-ref="defaultDispatcher" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="dxReceiverTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="handlerJob" />
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+    <bean id="sendSessionMqtt"
+          class="com.comet.eai.ext.mqttv3.SendSessionMqttImpl">
+        <property name="mqttMessageSender" ref="mqttMessageSender" />
+    </bean>
+
+    <bean id="dexptMqtt"
+          class="com.comet.eai.ext.mqttv3.DexptMqttImpl">
+        <property name="sendSession" ref="sendSessionMqtt" />
+    </bean>
+
+    <!-- sender impl -->
+    <bean name="senderJob"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass">
+            <value>com.comet.eai.ext.eaiimpl.SenderJob2</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="messageDao" value-ref="sendMessageDao" />
+                <entry key="dexpt" value-ref="dexptMqtt" />
+                <entry key="blocked" value="true" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="dxSenderTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="senderJob" />
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+    <!-- scheduler -->
+    <bean id="scheduler"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          destroy-method="destroy">
+        <property name="autoStartup">
+            <value>true</value>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref local="backupTrigger" />
+                <!--<ref local="messageReceiveTrigger" />-->
+                <ref local="dxSenderTrigger" />
+                <ref local="dxReceiverTrigger" />
+                <ref local="mqttReceiverCheckTrigger" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- service -->
+    <!--<bean id="leiManager" class="com.comet.eai.ext.eaiimpl.LeiManager">-->
+        <!--<property name="receiveMessageDao" ref="receiveMessageDao"/>-->
+        <!--<property name="leiMessageDispatcher" ref="leiDispatcher"/>-->
+        <!--<property name="sendMessageDao" ref="sendMessageDao"/>-->
+        <!--&lt;!&ndash;<property name="dexpt" ref="dexptJMS"/>&ndash;&gt;-->
+        <!--<property name="leiDexpt" ref="leiDexpt"/>-->
+        <!--<property name="messageMappingInfoCache" ref="messageMappingInfoCache"/>-->
+    <!--</bean>-->
+
+    <!-- for backup -->
+    <bean id="backupDao" class="com.comet.eai.ext.data.BackupDao">
+        <property name="dataSource" ref="dxDataSource" />
+    </bean>
+
+    <bean name="backupJob"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass">
+            <value>com.comet.eai.ext.eaiimpl.BackupMessageJob</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="backupDao" value-ref="backupDao" />
+                <!-- 每隔2小时备份一次 -->
+                <entry key="safeHours" value="2" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="backupTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="backupJob" />
+        <!-- 每隔2小时备份一次 -->
+        <property name="cronExpression" value="0 * */2 * * ?" />
+    </bean>
+
+    <bean id="messageReceiveTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <!--<property name="jobDetail" ref="messageReceiveJob" />-->
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+    <!-- MQTT消息处理Handler -->
+    <!--<bean id="eaiCallbackHandler" class="com.comet.eai.ext.mqttv3.EAICallbackHandler">-->
+        <!--<property name="receiveMessageDao" ref="receiveMessageDao"/>-->
+    <!--</bean>-->
+    <bean id="eaiCallbackHandler" class="com.icombo.eai.IcomboEAICallbackHandler">
+        <property name="receiveMessageDao" ref="receiveMessageDao"/>
+        <property name="repository" ref="messageContextHandlerRepository"/>
+    </bean>
+
+    <!-- MQTT客户端参数定义 -->
+    <bean id="mqttClientBean" class="com.comet.eai.ext.mqttv3.MqttClientBean">
+        <property name="tcpAddress" value="${mqtt.tcpAddress}"/>
+        <!--<property name="clientId" value="${mqtt.clientId}"/>-->
+        <property name="pubTopicString" value="${mqtt.pubTopicString}"/>
+        <property name="subTopicString" value="${mqtt.subTopicString}"/>
+        <property name="cleanSession" value="${mqtt.cleanSession}"/>
+        <property name="qos" value="${mqtt.qos}"/>
+    </bean>
+
+    <bean name="mqttReceiverCheckJob"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass">
+            <value>com.comet.eai.ext.mqttv3.MqttReceiverCheckJob</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="mqttMessageReceiver" value-ref="mqttMessageReceiver" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mqttReceiverCheckTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="mqttReceiverCheckJob" />
+        <property name="startDelay" value="120000" />
+        <property name="repeatInterval" value="5000" />
+    </bean>
+
+    <!-- MQTT消息接收客户端 -->
+    <bean id="mqttMessageReceiver" class="com.comet.eai.ext.mqttv3.MqttMessageReceiver" init-method="receive">
+        <property name="eaiCallbackHandler" ref="eaiCallbackHandler"/>
+        <property name="mqttClientBean" ref="mqttClientBean"/>
+    </bean>
+
+    <!-- MQTT消息发送客户端 -->
+    <bean id="mqttMessageSender" class="com.comet.eai.ext.mqttv3.MqttMessageSender">
+        <property name="eaiCallbackHandler" ref="eaiCallbackHandler"/>
+        <property name="mqttClientBean" ref="mqttClientBean"/>
+    </bean>
+</beans>
