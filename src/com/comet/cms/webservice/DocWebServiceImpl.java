@@ -1,5 +1,6 @@
 package com.comet.cms.webservice;
 
+import com.comet.cms.domain.CmsArticle;
 import com.comet.cms.domain.CmsTask;
 import com.comet.cms.manager.CmsTaskManager;
 import com.comet.core.orm.hibernate.Page;
@@ -214,13 +215,38 @@ public class DocWebServiceImpl implements DocWebService {
         List<CmsTask> rows = page.getRows();
         for (CmsTask task : rows) {
             HashMap hashMap = new HashMap();
-            hashMap.put("fileTitle",task.getArticle().getTitle());
+            //公文名称
+            CmsArticle article = task.getArticle();
+            String title = article.getTitle();
+            hashMap.put("fileTitle", title);
+
             ArrayList titleList = new ArrayList();
             HashMap valueMap = new HashMap();
-            String content = task.getArticle().getContent();
+            String content = article.getContent();
             valueMap.put("value", (content != null && content.length() > 10) ?(content.substring(0,10)+"..."):content);
+            valueMap.put("title",title);
+            valueMap.put("taskId",task.getId());
             titleList.add(valueMap);
             hashMap.put("base1", titleList);
+            hashMap.put("base", titleList);
+
+            //附件
+
+            ArrayList attachments = new ArrayList();
+            HashMap attachmentMap;
+            String attachPath;
+            String fileName;
+            if(article.getAttachPath()!=null){
+                attachmentMap = new HashMap();
+                attachPath = article.getAttachPath();
+                fileName = attachPath.substring(attachPath.indexOf("_") + 1);
+                attachmentMap.put("attachname",fileName);
+                attachmentMap.put("attachid",fileName);
+                attachmentMap.put("urllink",attachPath);
+                attachments.add(attachmentMap);
+            }
+
+            hashMap.put("attachments", attachments);
             list.add(hashMap);
         }
 
@@ -310,7 +336,7 @@ public class DocWebServiceImpl implements DocWebService {
      * @throws Exception
      */
     private String findDoneTasks(String corpID, String empId, String synDate,
-                                String alink, int width, int rowsOfpage, int numpage, Map map)
+                                 String alink, int width, int rowsOfpage, int numpage, Map map)
             throws Exception {
         long offset = (numpage - 1) * rowsOfpage;
         long limit = rowsOfpage;
