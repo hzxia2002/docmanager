@@ -243,6 +243,7 @@ public class DocWebServiceImpl implements DocWebService {
                 attachmentMap.put("attachname",fileName);
                 attachmentMap.put("attachid",fileName);
                 attachmentMap.put("urllink",attachPath);
+                attachmentMap.put("articleId",article.getId());
                 attachments.add(attachmentMap);
             }
 
