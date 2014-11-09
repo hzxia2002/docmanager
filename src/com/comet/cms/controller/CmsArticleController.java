@@ -144,6 +144,9 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                 "isValid",
                 "publishDate",
                 "linkUrl",
+                "attachPath",
+                "attachPath2",
+                "attachPath3",
                 "keyword"
         };
         CmsArticlePropertity cmsArticlePropertity = new CmsArticlePropertity();

@@ -47,33 +47,29 @@
                         </td>
                     </tr>
                     <tr>
+                        <td align="left" height="32" style="vertical-align: middle;">
                         <%
                             if (StringUtils.isNotEmpty(fileName)) {
                         %>
-                        <td align="left" height="32" style="vertical-align: middle;">
                             <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a
                                 href="${ctx}${bean.attachPath}" target="_blank" title="点击下载"><%=fileName%>
                         </a>
-                        </td>
                         <%}%>
                         <%
                             if (StringUtils.isNotEmpty(fileName2)) {
                         %>
-                        <td align="left" height="32" style="vertical-align: middle;">
                             <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a
                                 href="${ctx}${bean.attachPath2}" target="_blank" title="点击下载"><%=fileName2%>
                         </a>
-                        </td>
                         <%}%>
                         <%
                             if (StringUtils.isNotEmpty(fileName3)) {
                         %>
-                        <td align="left" height="32" style="vertical-align: middle;">
                             <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a
                                 href="${ctx}${bean.attachPath3}" target="_blank" title="点击下载"><%=fileName3%>
                         </a>
-                        </td>
                         <%}%>
+                        </td>
                     </tr>
                     <tr><td align="left">接收者：${bean.userNames}</td></tr>
                     <tr><td align="left">外部链接：${bean.linkUrl}</td></tr>
