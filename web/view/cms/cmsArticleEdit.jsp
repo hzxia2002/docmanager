@@ -43,8 +43,8 @@
                 </td>
                 <td class="container" valign="middle">
                     <input type="file" id="file" name="file">
-                    <input type="file" id="file2" name="file">
-                    <input type="file" id="file3" name="file">
+                    <input type="file" id="file2" name="file2">
+                    <input type="file" id="file3" name="file3">
                         <span id="fileSpan">
                         <c:if test="${not empty bean.attachPath}">
                             <a href="${ctx}${bean.attachPath}" target="_blank">附件</a>
@@ -99,7 +99,7 @@
             <tr>
                 <td colspan="2" valign="middle" align="center" height="30">
                     <input type="button" id="formCmsArticleButtonNew" value="新增" >&nbsp;
-                    <input type="button" id="formCmsArticleButtonSave" value="保存" >&nbsp;
+                    <%--<input type="button" id="formCmsArticleButtonSave" value="保存" >&nbsp;--%>
                     <input type="button" value="取消" onclick="doClose();">
                 </td>
             </tr>
@@ -230,10 +230,10 @@
     var dialogJuiId = '<%=request.getParameter("dialogJuiId")%>';
 
     function doClose() {
-        var obj = window.top.$.jui.get(dialogJuiId);
-
-        if(obj != null) {
-            obj.close();
-        }
+        parent.tab.removeTabItem("cmsArticleNew");
+//        var obj = window.top.$.jui.get(dialogJuiId);
+//        if(obj != null) {
+//            obj.close();
+//        }
     }
 </script>

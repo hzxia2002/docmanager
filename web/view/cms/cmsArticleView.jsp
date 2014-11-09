@@ -3,11 +3,22 @@
 <%@ page import="com.comet.cms.domain.CmsArticle" %>
 <%@ include file="/common/taglibs.jsp" %>
 <%
-    CmsArticle bean = (CmsArticle)request.getAttribute("bean");
+    CmsArticle bean = (CmsArticle) request.getAttribute("bean");
+    request.getAttribute("success") ;
     String fileName = "";
-    if(StringUtils.isNotEmpty(bean.getAttachPath())) {
+    String fileName2 = "";
+    String fileName3 = "";
+    if (StringUtils.isNotEmpty(bean.getAttachPath())) {
         String attachPath = bean.getAttachPath();
         fileName = attachPath.substring(attachPath.indexOf("_") + 1);
+    }
+    if (StringUtils.isNotEmpty(bean.getAttachPath2())) {
+        String attachPath2 = bean.getAttachPath2();
+        fileName2 = attachPath2.substring(attachPath2.indexOf("_") + 1);
+    }
+    if (StringUtils.isNotEmpty(bean.getAttachPath3())) {
+        String attachPath3 = bean.getAttachPath3();
+        fileName3 = attachPath3.substring(attachPath3.indexOf("_") + 1);
     }
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,32 +29,56 @@
 <div>
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
-            <td height="120" align="center"><table class="main_text" width="95%" border="0">
-                <tr>
-                    <td align="center">
-                        <strong>${bean.title}</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" valign="top" height="350">
-                        ${bean.content}
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" valign="top">
-                        关键字：${bean.keyword}
-                    </td>
-                </tr>
-                <%
-                    if(StringUtils.isNotEmpty(fileName)) {
-                %>
-                <tr>
-                    <td align="left" height="32" style="vertical-align: middle;">
-                        <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a href="${ctx}${bean.attachPath}" target="_blank" title="点击下载"><%=fileName%></a>
-                    </td>
-                </tr>
-                <%}%>
-            </table></td>
+            <td height="120" align="center">
+                <table class="main_text" width="95%" border="0">
+                    <tr>
+                        <td align="center">
+                            <strong style="font-weight: bold">${bean.title}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" height="350">
+                            ${bean.content}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top">
+                            关键字：${bean.keyword}
+                        </td>
+                    </tr>
+                    <tr>
+                        <%
+                            if (StringUtils.isNotEmpty(fileName)) {
+                        %>
+                        <td align="left" height="32" style="vertical-align: middle;">
+                            <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a
+                                href="${ctx}${bean.attachPath}" target="_blank" title="点击下载"><%=fileName%>
+                        </a>
+                        </td>
+                        <%}%>
+                        <%
+                            if (StringUtils.isNotEmpty(fileName2)) {
+                        %>
+                        <td align="left" height="32" style="vertical-align: middle;">
+                            <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a
+                                href="${ctx}${bean.attachPath2}" target="_blank" title="点击下载"><%=fileName2%>
+                        </a>
+                        </td>
+                        <%}%>
+                        <%
+                            if (StringUtils.isNotEmpty(fileName3)) {
+                        %>
+                        <td align="left" height="32" style="vertical-align: middle;">
+                            <img src="<c:url value="/skin/icons/page_attach.png"/>"><b>附件：</b><a
+                                href="${ctx}${bean.attachPath3}" target="_blank" title="点击下载"><%=fileName3%>
+                        </a>
+                        </td>
+                        <%}%>
+                    </tr>
+                    <tr><td align="left">接收者：${bean.userNames}</td></tr>
+                    <tr><td align="left">外部链接：${bean.linkUrl}</td></tr>
+                </table>
+            </td>
         </tr>
     </table>
 </div>

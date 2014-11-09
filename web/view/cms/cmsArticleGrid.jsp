@@ -57,8 +57,8 @@
             items: [
                 { text: '增加', click: doAdd, icon: 'add' },
                 { line: true },
-                { text: '修改', click: doEdit, icon: 'modify' },
-                { line: true },
+//                { text: '修改', click: doEdit, icon: 'modify' },
+//                { line: true },
                 { text: '查看', click: doView, icon: 'search2' },
                 { line: true },
                 { text: '删除', click: doDelete, icon:'delete' }
@@ -118,7 +118,6 @@
             url +="?category=" + parentId;
         }
 //        commonAddOrUpdate(url,"maingrid2",null,"cmsArticleEditForm",{title:"新增",height:600,width:1024,callback:refreshNode, buttons:null});
-
         parent.f_addTab("cmsArticleNew","公文新增",url);
     }
 

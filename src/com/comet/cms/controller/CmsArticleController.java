@@ -12,7 +12,9 @@ import com.comet.core.security.util.SpringSecurityUtils;
 import com.comet.core.utils.DateTimeHelper;
 import com.comet.core.utils.FileUtils;
 import com.comet.core.utils.ReflectionUtils;
+import com.comet.system.daoservice.SysRoleService;
 import com.comet.system.daoservice.SysUserRoleService;
+import com.comet.system.daoservice.SysUserService;
 import com.comet.system.domain.SysRole;
 import com.comet.system.domain.SysUser;
 import com.comet.system.domain.SysUserRole;
@@ -60,6 +62,12 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
 
     @Autowired
     private CmsTaskService cmsTaskService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     public static final String[] PERMIT_IMAGE_TYPE = new String[]{"jpg", "jpeg", "gif", "png"};
 
@@ -128,9 +136,44 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
      */
     @RequestMapping
     public String view(Model model, Long id) {
+        String[] columns = new String[]{
+                "category",
+                "title",
+                "content",
+                "isTop",
+                "isValid",
+                "publishDate",
+                "linkUrl",
+                "keyword"
+        };
+        CmsArticlePropertity cmsArticlePropertity = new CmsArticlePropertity();
         CmsArticle bean = cmsArticleService.get(id);
-
-        model.addAttribute("bean", bean);
+        try {
+            ReflectionUtils.copyBean(bean, cmsArticlePropertity, columns);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String receivers = "";
+        String roleName = "";
+        String userName = "";
+        Long roleId ;
+        Long userId ;
+        List<CmsReceiver> receiversList = cmsReceiverService.find(" from CmsReceiver  where  article = "+id);
+        for(int i=0;i<receiversList.size();i++){
+            roleId = receiversList.get(i).getRole().getId();
+            userId = receiversList.get(i).getUser().getId();
+            if(roleId!=null){
+                roleName = sysRoleService.get(roleId).getRoleName();
+                roleName +=":";
+            }
+            if(userId!=null){
+                userName = sysUserService.get(userId).getDisplayName();
+                if(i!=receiversList.size()-1){userName +=",";}
+            }
+           receivers+=roleName+userName;
+        }
+        cmsArticlePropertity.setUserNames(receivers);
+        model.addAttribute("bean", cmsArticlePropertity);
         return "view/cms/cmsArticleView";
     }
 
@@ -159,7 +202,6 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                     "linkUrl",
                     "keyword"
             };
-            String[] columns2 = new String[]{"roleIds","userIds"};
 
             // 如果有图片，上传图片
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -167,6 +209,8 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             Map map = null;
             String thumbPath = "";
             String attachPath = "";
+            String attachPath2 = "";
+            String attachPath3 = "";
 
             while (it.hasNext()) {
                 String name = (String) it.next();
@@ -199,8 +243,12 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
 
                     if(isImage) {
                         thumbPath = map.get("filePath").toString() + map.get("thumbFileName").toString();
-                    } else {
+                    } else if(name.equals("file")){
                         attachPath = map.get("filePath").toString() + map.get("newFileName").toString();
+                    } else if(name.equals("file2")){
+                        attachPath2 = map.get("filePath").toString() + map.get("newFileName").toString();
+                    } else if(name.equals("file3")){
+                        attachPath3 = map.get("filePath").toString() + map.get("newFileName").toString();
                     }
                 }
             }
@@ -227,6 +275,14 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                 target.setAttachPath(attachPath);
             }
 
+            if(StringUtils.isNotBlank(attachPath2)) {
+                target.setAttachPath2(attachPath2);
+            }
+
+            if(StringUtils.isNotBlank(attachPath3)) {
+                target.setAttachPath3(attachPath3);
+            }
+
             if(StringUtils.isNotBlank(thumbPath)) {
                 target.setThumbPath(thumbPath);
             }
@@ -243,7 +299,7 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             SysUser sysUser;
             List<SysUserRole> result;
             List<CmsReceiver> result1;
-            if(roleIds!=null||!roleIds.equals("")){
+            if(roleIds!=null&&!roleIds.equals("")){
                 for(String role:roles){
                     result = sysUserRoleService.find(" from SysUserRole  where  role = "+role);
                     for(int i=0;i<result.size();i++){
@@ -263,7 +319,7 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                     }
                 }
             }
-            if(userIds!=null||!userIds.equals("")){
+            if(userIds!=null&&!userIds.equals("")){
                 for(String user:users){
                     result1 = cmsReceiverService.find(" from CmsReceiver  where  user = "+user);
                     if(result1.size()==0){
@@ -285,7 +341,6 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             log.error("error", e);
             super.processException(response, e);
         }
-
         return "view/cms/cmsArticleEdit";
     }
 
@@ -298,8 +353,9 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
      */
     @RequestMapping
     public void delete(HttpServletResponse response, Long id) throws Exception {
+        cmsReceiverService.deleteBySql(" delete CmsReceiver where article= "+id);
+        cmsTaskService.deleteBySql(" delete CmsTask where article="+id);
         cmsArticleService.delete(id);
-
         sendSuccessJSON(response, "删除成功");
     }
 

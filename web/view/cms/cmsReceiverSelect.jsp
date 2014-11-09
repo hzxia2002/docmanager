@@ -84,7 +84,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div id="sysSelectedUserGrid" rownumbers="true"  height="100%"  url='' root="rows" record="records"  width="500"  colDraggable="true" >
+                                <div id="sysSelectedUserGrid" rownumbers="true" onDblClickRow="ondbclick"  height="100%"  url='' root="rows" record="records"  width="500"  colDraggable="true" >
                                 </div>
                             </td>
                         </tr>
@@ -111,7 +111,7 @@
         });
 
         $("#sysSelectedUserGrid").juiceGrid({
-            title: "已选用户",
+            title: "已选用户（通过双击行移除）",
             columns: [
                 { display: '主键', name: 'id', width: 50, type: 'int',hide:true },
                 { display: '登录名', name: 'loginName',width:"20%"},
@@ -177,5 +177,12 @@
         ret[1] = label;
 
         return ret;
+    }
+
+    function ondbclick(data, rowindex, rowobj)
+    {
+        var manager = $("#sysSelectedUserGrid").juiceGetGridManager();
+        var row = manager.getSelectedRow();
+        manager.deleteRow(row);
     }
 </script>
