@@ -55,7 +55,7 @@ public abstract class BaseCmsTask implements Serializable, Auditable {
 
     private String handlingResult;
 
-    private Boolean isRead;
+    private Long isRead;
 
     private Timestamp handlingTime;
 
@@ -117,11 +117,11 @@ public abstract class BaseCmsTask implements Serializable, Auditable {
         this.handlingResult = handlingResult;
     }
 
-    public Boolean getIsRead() {
+    public Long getIsRead() {
         return isRead;
     }
 
-    public void setIsRead(Boolean isRead) {
+    public void setIsRead(Long isRead) {
         this.isRead = isRead;
     }
 

@@ -52,7 +52,7 @@
         <property
                 name="isRead"
                 column="IS_READ"
-                type="java.lang.Boolean"
+                type="java.lang.Long"
                 not-null="false"
                 length="1"
                 >

@@ -322,6 +322,7 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                         cmsReceiver.setArticle(target);
                         cmsTask.setArticle(target);
                         cmsTask.setUser(sysUser);
+                        cmsTask.setIsRead(1L);
                         cmsReceiverService.save(cmsReceiver);
                         cmsTaskService.save(cmsTask);
                     }
