@@ -76,6 +76,14 @@ public class DocWebServiceImpl implements DocWebService {
         return null;
     }
 
+    public String reBack(String currentUserLabel, String taskId, String fileId,String commentContent,String whereSQL) throws Exception {
+        DataResults dataResults = new DataResults();
+        cmsTaskManager.save(taskId,commentContent);
+        dataResults.setResultDataDesc("提交完成");
+        dataResults.setResultDataType("1");
+        return dataResultsToJsonStr(dataResults);
+    }
+
     @Override
     public String login(String userid, String password) throws Exception {
         DataResults dataResults = new DataResults();
@@ -225,10 +233,12 @@ public class DocWebServiceImpl implements DocWebService {
             String content = article.getContent();
             valueMap.put("value", (content != null && content.length() > 10) ?(content.substring(0,10)+"..."):content);
             valueMap.put("title",title);
-            valueMap.put("taskId",task.getId());
+            Long taskId = task.getId();
+            valueMap.put("taskId", taskId);
             titleList.add(valueMap);
             hashMap.put("base1", titleList);
             hashMap.put("base", titleList);
+            hashMap.put("taskId", taskId);
 
             //附件
 

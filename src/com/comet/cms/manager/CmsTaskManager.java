@@ -43,4 +43,16 @@ public class CmsTaskManager {
 
         return cmsTaskService.findByPage(page, hql);
     }
+
+    /**
+     * 文件处理
+     * @param taskId
+     * @param commentContent
+     */
+    public void save(String taskId, String commentContent){
+        CmsTask task = cmsTaskService.get(Long.valueOf(taskId));
+        task.setHandlingSuggestion(commentContent);
+        task.setHandlingResult("01");
+        cmsTaskService.save(task);
+    }
 }

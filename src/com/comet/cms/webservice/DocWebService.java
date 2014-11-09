@@ -9,6 +9,8 @@ import javax.jws.WebService;
 public interface DocWebService {
     public String login(String userid,String password) throws Exception ;
 
+    public String reBack(String currentUserLabel, String taskId, String fileId,String commentContent,String whereSQL) throws Exception ;
+
     public String getfilekind();
 
     public String getDataMessageList(String corpID, String empId, String type,
