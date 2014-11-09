@@ -383,10 +383,13 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
 
         if(StringUtils.equals(delType, "0")) {
             bean.setThumbPath("");
-            msg = "图片";
+            msg = "附件1";
         } else if(StringUtils.equals(delType, "1")) {
-            bean.setAttachPath("");
-            msg = "附件";
+            bean.setAttachPath2("");
+            msg = "附件2";
+        } else if(StringUtils.equals(delType, "1")) {
+            bean.setAttachPath3("");
+            msg = "附件3";
         }
 
         cmsArticleService.update(bean);

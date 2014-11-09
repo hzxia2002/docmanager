@@ -49,17 +49,21 @@
                         <c:if test="${not empty bean.attachPath}">
                             <a href="${ctx}${bean.attachPath}" target="_blank">附件1</a>
                             &nbsp;
-                            <a href="javascript:void(0);" onclick="javascript:deleteFile('1');">删除</a>
+                            <a href="javascript:void(0);" onclick="javascript:deleteFile('0');">删除</a>
                         </c:if>
+                             </span>
+                         <span id="fileSpan2">
                               <c:if test="${not empty bean.attachPath2}">
                                   <a href="${ctx}${bean.attachPath2}" target="_blank">附件2</a>
                                   &nbsp;
                                   <a href="javascript:void(0);" onclick="javascript:deleteFile('1');">删除</a>
                               </c:if>
+                          </span>
+                          <span id="fileSpan3">
                               <c:if test="${not empty bean.attachPath3}">
                                   <a href="${ctx}${bean.attachPath3}" target="_blank">附件3</a>
                                   &nbsp;
-                                  <a href="javascript:void(0);" onclick="javascript:deleteFile('1');">删除</a>
+                                  <a href="javascript:void(0);" onclick="javascript:deleteFile('2');">删除</a>
                               </c:if>
                         </span>
                 </td>
@@ -228,9 +232,11 @@
             success: function(data){
                 showInfoMsg(data.msg,null);
                 if(delType == '0') {
-                    $("#picSpan").html("");
-                } else if(delType == '1') {
                     $("#fileSpan").html("");
+                } else if(delType == '1') {
+                    $("#fileSpan2").html("");
+                } else if(delType == '2') {
+                    $("#fileSpan3").html("");
                 }
             },
             dataType: 'json'
