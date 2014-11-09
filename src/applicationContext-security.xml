@@ -23,6 +23,7 @@
         <intercept-url pattern="/imageCode.jsp*" filters="none"/>
         <intercept-url pattern="/theme/**" filters="none"/>
         <intercept-url pattern="/userinfo*/lookForPwd.do" filters="none"/>
+        <intercept-url pattern="/fileDownload*/downloadAttachment.do" filters="none"/>
         <!--
         <intercept-url pattern="/login.jsp*" filters="none" requires-channel="https"/>
         <intercept-url pattern="/j_spring_security_check*" filters="none" requires-channel="https"/>

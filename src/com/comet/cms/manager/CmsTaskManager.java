@@ -33,7 +33,7 @@ public class CmsTaskManager {
      * @return
      */
     public Page<CmsTask> queryTasks(Page page, String status) {
-        String hql = "from CmsTask t where 1=1 ";
+        String hql = "from CmsTask t left join fetch t.article where 1=1 ";
 
         if(StringUtils.equals(status, "1")) {
             hql += " and t.handlingResult <> null";
