@@ -73,15 +73,18 @@
                     接收人:
                     <input type="hidden" id="userIds" name="userIds" value="${bean.userIds}">
                     <input type="hidden" id="roleIds" name="roleIds" value="${bean.roleIds}">
+                    <input type="hidden" id="roleNames" name="roleNames" value="${bean.roleNames}">
+                    <input type="hidden" id="userNames" name="userNames" value="${bean.userNames}">
                 </td>
                 <td class="container" valign="middle">
                     <table width="100%">
                         <tr height="25">
                             <td rowspan="2" style="width: 70px;" align="center"><input type="button" id="selectReceiver" value="请选择"></td>
-                            <td><b>已选角色：</b><input id="roleNames" name="roleNames" value="${bean.roleNames}" readonly /></td>
+                            <td><b>已选角色：</b><span id="roleNamesView"   >${bean.roleNames}</span></td>
                         </tr>
                         <tr height="25">
-                            <td><b>已选用户：</b><input id="userNames" name="userNames" value="${bean.userNames}" readonly /></td>
+                            <%--<td><b>已选用户：</b><input id="userNames" name="userNames" value="${bean.userNames}" readonly /></td>--%>
+                            <td><b>已选用户：</b><span id="userNamesView" >${bean.userNames}</span></td>
                         </tr>
                     </table>
                 </td>
@@ -206,14 +209,14 @@
 
             $("#userIds").val(userIds);
             $("#userNames").val(userNames);
+            $("#userNamesView").html(userNames);
         }
 
         var data2 = fn2();
 
-        debugger;
-
         $("#roleIds").val(data2[0]);
         $("#roleNames").val(data2[1]);
+        $("#roleNamesView").html(data2[1]);
 
         dialog.close();
     }
