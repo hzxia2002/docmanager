@@ -128,22 +128,22 @@
         $.metadata.setType("attr", "validate");
         v = $('#cmsArticleEditForm').validate();
 
-        KindEditor.ready(function(K) {
-            editor = K.create('#content'
-                    ,{
-                        uploadJson : '${ctx}/js/kindeditor/jsp/upload_json.jsp',
-                        fileManagerJson : '${ctx}/js/kindeditor/jsp/file_manager_json.jsp',
-                        allowFileManager : true
-                    }
-            );
-        });
+        <%--KindEditor.ready(function(K) {--%>
+            <%--editor = K.create('#content'--%>
+                    <%--,{--%>
+                        <%--uploadJson : '${ctx}/js/kindeditor/jsp/upload_json.jsp',--%>
+                        <%--fileManagerJson : '${ctx}/js/kindeditor/jsp/file_manager_json.jsp',--%>
+                        <%--allowFileManager : true--%>
+                    <%--}--%>
+            <%--);--%>
+        <%--});--%>
 
         $('#formCmsArticleButtonSave').click(function() {
             if (!v) {
                 return;
             }
 
-            editor.sync();
+//            editor.sync();
             document.getElementById("cmsArticleEditForm").submit();
         });
 
@@ -153,7 +153,7 @@
             }
 
             $("#id").val();
-            editor.sync();
+//            editor.sync();
 
             $("#cmsArticleEditForm").submit();
         });
