@@ -266,11 +266,11 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             if(userIds!=null||!userIds.equals("")){
                 for(String user:users){
                     result1 = cmsReceiverService.find(" from CmsReceiver  where  user = "+user);
-                    for(int i=0;i<result1.size();i++){
+                    if(result1.size()==0){
                         cmsReceiver = new CmsReceiver();
                         cmsTask = new CmsTask();
                         sysUser = new SysUser();
-                        sysUser.setId(result1.get(i).getUser().getId());
+                        sysUser.setId(Long.valueOf(user));
                         cmsReceiver.setUser(sysUser);
                         cmsReceiver.setArticle(target);
                         cmsTask.setArticle(target);
