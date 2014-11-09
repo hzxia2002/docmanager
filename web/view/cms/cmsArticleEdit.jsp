@@ -47,18 +47,28 @@
                     <input type="file" id="file3" name="file3">
                         <span id="fileSpan">
                         <c:if test="${not empty bean.attachPath}">
-                            <a href="${ctx}${bean.attachPath}" target="_blank">附件</a>
+                            <a href="${ctx}${bean.attachPath}" target="_blank">附件1</a>
                             &nbsp;
                             <a href="javascript:void(0);" onclick="javascript:deleteFile('1');">删除</a>
                         </c:if>
+                              <c:if test="${not empty bean.attachPath2}">
+                                  <a href="${ctx}${bean.attachPath2}" target="_blank">附件2</a>
+                                  &nbsp;
+                                  <a href="javascript:void(0);" onclick="javascript:deleteFile('1');">删除</a>
+                              </c:if>
+                              <c:if test="${not empty bean.attachPath3}">
+                                  <a href="${ctx}${bean.attachPath3}" target="_blank">附件3</a>
+                                  &nbsp;
+                                  <a href="javascript:void(0);" onclick="javascript:deleteFile('1');">删除</a>
+                              </c:if>
                         </span>
                 </td>
             </tr>
             <tr class="inputTr" height="28">
                 <td>
                     接收人:
-                    <input type="hidden" id="userIds" name="userIds" value="">
-                    <input type="hidden" id="roleIds" name="roleIds" value="">
+                    <input type="hidden" id="userIds" name="userIds" value="${bean.userIds}">
+                    <input type="hidden" id="roleIds" name="roleIds" value="${bean.roleIds}">
                 </td>
                 <td class="container" valign="middle">
                     <table width="100%">
@@ -99,7 +109,7 @@
             <tr>
                 <td colspan="2" valign="middle" align="center" height="30">
                     <input type="button" id="formCmsArticleButtonNew" value="新增" >&nbsp;
-                    <%--<input type="button" id="formCmsArticleButtonSave" value="保存" >&nbsp;--%>
+                    <input type="button" id="formCmsArticleButtonSave" value="保存" >&nbsp;
                     <input type="button" value="取消" onclick="doClose();">
                 </td>
             </tr>

@@ -196,13 +196,18 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             throws Exception {
         try {
             String[] columns = new String[]{
+                    "id",
                     "category",
+                    "content",
                     "title",
                     "content",
                     "isTop",
                     "isValid",
                     "publishDate",
                     "linkUrl",
+                    "attachPath",
+                    "attachPath2",
+                    "attachPath3",
                     "keyword"
             };
 
@@ -259,9 +264,9 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
             CmsArticle target;
             if (entity.getId() != null) {
                 target = cmsArticleService.get(entity.getId());
-
                 ReflectionUtils.copyBean(entity, target, columns);
-
+                cmsReceiverService.deleteBySql(" delete CmsReceiver where article= "+target.getId());
+                cmsTaskService.deleteBySql(" delete CmsTask where article="+target.getId());
                 target.setUpdateUser(SpringSecurityUtils.getCurrentUser().getLoginName());
                 target.setUpdateTime(DateTimeHelper.getTimestamp());
             } else {
@@ -339,6 +344,7 @@ public class CmsArticleController extends BaseCRUDActionController<CmsCategory> 
                     }
                 }
             }
+            ReflectionUtils.copyBean(target, entity, columns);
             model.addAttribute("bean", entity);
         } catch (Exception e) {
             log.error("error", e);
