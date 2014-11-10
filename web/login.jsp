@@ -93,7 +93,8 @@
                         <a href="#" onclick="reloadImage();">换一张</a>
                     </p>
                     <p style="margin-bottom: 5px">
-                        <a href="#" class="indented large">忘记密码</a>
+                        <a href="#" class="indented large">忘记密码</a>&nbsp;
+                        <a href="efmpx4a.apk" class="indented large">客户端下载</a>
                     </p>
 
                     <%--<p class="indented large">--%>
