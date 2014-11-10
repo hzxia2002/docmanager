@@ -64,15 +64,14 @@
             toolbar:toolbar,
             columns: [
                 { display: '主键', name: 'id', width: 50,hide:true },
-                { display: '公文编码', name: 'article',width:"50",hide:true},
-                { display: '当前用户', name: 'user',width:"50",hide:true},
-                { display: '公文编码', name: 'article',width:"10%",hide:true},
-                { display: '建议', name: 'handlingSuggestion',width:"15%"},
+                { display: '公文标题', name: 'article.title',width:"15%",hide:false},
+                { display: '接收用户', name: 'user.displayName',width:"15%",hide:false},
                 { display: '处理结果', name: 'handlingResult',width:"10%" },
-                { display: '是否已读', name: 'isRead',width:"5%", render: statusFormatter},
-                { display: '读取时间', name: 'readTime',width:"15%" },
-                { display: '发布人', name: 'createUser',width:"15%"  },
-                { display: '发布时间', name: 'createTime',width:"15%" }
+                { display: '处理意见', name: 'handlingSuggestion',width:"15%"},
+                { display: '已读', name: 'isRead',width:"5%", render: statusFormatter},
+                { display: '阅读时间', name: 'readTime',width:"10%" },
+                { display: '发布人', name: 'createUser',width:"10%"  },
+                { display: '发布时间', name: 'createTime',width:"10%" }
             ]
 //        enabledEdit: true
         });
