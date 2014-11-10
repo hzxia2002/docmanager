@@ -76,7 +76,7 @@ public class DocWebServiceImpl implements DocWebService {
         return null;
     }
 
-    public String reBack(String currentUserLabel, String taskId, String fileId,String commentContent,String whereSQL) throws Exception {
+    public String reBack(String currentUserLabel, String taskId, String fileId,String commentContent,String whereSQL,String loginName) throws Exception {
         DataResults dataResults = new DataResults();
         cmsTaskManager.save(taskId,commentContent);
         dataResults.setResultDataDesc("提交完成");
@@ -210,10 +210,10 @@ public class DocWebServiceImpl implements DocWebService {
 
         if (typeInt == ArcFileWaitingWork) {
             // 待办工作
-            page = cmsTaskManager.queryTasks(page, "0");
+            page = cmsTaskManager.queryTasks(page, "0",empId);
         } else if (typeInt == ArcFileDoneWork) {
             // 已办工作
-            page = cmsTaskManager.queryTasks(page, "1");
+            page = cmsTaskManager.queryTasks(page, "1",empId);
         }
 
         dataResults.setResultDataTime(DateTimeHelper.getDate(new Date()));
@@ -231,7 +231,7 @@ public class DocWebServiceImpl implements DocWebService {
             ArrayList titleList = new ArrayList();
             HashMap valueMap = new HashMap();
             String content = article.getContent();
-            valueMap.put("value", (content != null && content.length() > 10) ?(content.substring(0,10)+"..."):content);
+            valueMap.put("value", content);
             valueMap.put("title",title);
             Long taskId = task.getId();
             valueMap.put("taskId", taskId);
@@ -249,13 +249,17 @@ public class DocWebServiceImpl implements DocWebService {
             if(article.getAttachPath()!=null){
                 attachmentMap = new HashMap();
                 attachPath = article.getAttachPath();
-                fileName = attachPath.substring(attachPath.indexOf("_") + 1);
-                attachmentMap.put("attachname",fileName);
-                attachmentMap.put("attachid",fileName);
-                attachmentMap.put("urllink",attachPath);
-                attachmentMap.put("articleId",article.getId());
-                attachments.add(attachmentMap);
+                addAttachment(article, attachments, attachPath,1L);
             }
+            if(article.getAttachPath2()!=null){
+                attachPath = article.getAttachPath2();
+                addAttachment(article, attachments, attachPath,2L);
+            }
+            if(article.getAttachPath3()!=null){
+                attachPath = article.getAttachPath3();
+                addAttachment(article, attachments, attachPath,3L);
+            }
+
 
             hashMap.put("attachments", attachments);
             list.add(hashMap);
@@ -282,6 +286,19 @@ public class DocWebServiceImpl implements DocWebService {
 //        }
 
         return dataResultsToJsonStr(dataResults);
+    }
+
+    public void addAttachment(CmsArticle article, ArrayList attachments, String attachPath,Long index) {
+        HashMap attachmentMap;
+        String fileName;
+        attachmentMap = new HashMap();
+        fileName = attachPath.substring(attachPath.indexOf("_") + 1);
+        attachmentMap.put("attachname",fileName);
+        attachmentMap.put("attachid",fileName);
+        attachmentMap.put("urllink",attachPath);
+        attachmentMap.put("articleId",article.getId());
+        attachmentMap.put("index",index);
+        attachments.add(attachmentMap);
     }
 
     /**

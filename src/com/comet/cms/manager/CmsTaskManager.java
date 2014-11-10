@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -32,8 +33,8 @@ public class CmsTaskManager {
      * @param status
      * @return
      */
-    public Page<CmsTask> queryTasks(Page page, String status) {
-        String hql = "from CmsTask t left join fetch t.article where 1=1 ";
+    public Page<CmsTask> queryTasks(Page page, String status,String loginName) {
+        String hql = "from CmsTask t left join fetch t.article where 1=1 and t.user.loginName='"+loginName+"'";
 
         if(StringUtils.equals(status, "1")) {
             hql += " and t.handlingResult <> null";
@@ -53,6 +54,8 @@ public class CmsTaskManager {
         CmsTask task = cmsTaskService.get(Long.valueOf(taskId));
         task.setHandlingSuggestion(commentContent);
         task.setHandlingResult("01");
+        task.setIsRead(1L);
+        task.setReadTime(new Timestamp(System.currentTimeMillis()));
         cmsTaskService.save(task);
     }
 }

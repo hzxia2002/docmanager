@@ -33,7 +33,14 @@ public class FileDownloadController {
         CmsArticle cmsArticle = cmsArticleService.get(articleId);
 
         try {
-            String attachPath = cmsArticle.getAttachPath();
+            String attachPath ="";
+            if(index==1){
+                attachPath   = cmsArticle.getAttachPath();
+            }else if(index==2){
+                attachPath   = cmsArticle.getAttachPath2();
+            }else if(index==3){
+                attachPath   = cmsArticle.getAttachPath3();
+            }
             in = new FileInputStream(filePath + attachPath.substring(attachPath.indexOf("/",1)));
             String fileName = attachPath.substring(attachPath.indexOf("_") + 1);
             response.reset();
